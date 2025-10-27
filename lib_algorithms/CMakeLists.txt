@@ -1,1 +1,2 @@
-﻿create_project_lib(alrogithms)
+﻿create_project_lib(algorithms)
+target_include_directories(algorithms PUBLIC ../lib_stack)

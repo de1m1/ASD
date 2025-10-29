@@ -157,3 +157,38 @@ TEST(ListTest, MixedOperations) {
     EXPECT_EQ(lst.front(), 1);
     EXPECT_EQ(lst.back(), 2);
 }
+
+
+TEST(ListTest, can_read) {
+    list<int>mlist;
+    for (int i = 0; i < 10; i++) { 
+        mlist.push_back(i+1); 
+    }
+
+    int expected_val = 1;
+    for (list<int>::Iterator it = mlist.begin(); it != mlist.end(); it++) {
+        EXPECT_EQ(*it, expected_val);
+        expected_val++;
+    }
+
+}
+
+TEST(ListTest, can_write) {
+
+    list<int>mlist;
+    int expected_val = 1;
+    for (list<int>::Iterator it = mlist.begin(); it != mlist.end(); it++) {
+        EXPECT_EQ(*it, expected_val);
+        expected_val++;
+    }
+
+}
+
+TEST(ListTest, is_empty) {
+    list<int>mlist;
+
+    for (list<int>::Iterator it = mlist.begin(); it != mlist.end(); it++) {
+        *it = 0;
+    }
+
+}

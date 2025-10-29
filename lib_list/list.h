@@ -31,6 +31,41 @@ public:
     T& back();
     Node<T>* begin() const;
     Node<T>* end() const;
+
+    class Iterator {
+        Node<T>* current;
+
+    public:
+        //Конструкторы
+        Iterator() : current(_head) {}
+        Iterator(Node<T>* pos) : current(pos) {}
+        Iterator(const Iterator& other) : current(other.current) {}
+
+        //Оператор =
+        Iterator& operator=(const Iterator& other) {
+            if (this != &other) { current = other.current; }
+            return *this;
+        }
+        //Оператор *
+        T& operator*() {
+            if (current == nullptr) { throw std::logic_error(" "); }
+            return current->val;
+        }
+        //Проверка на неравенство
+        bool operator!=(const Iterator& other){ return current != other.current; }
+        //Оператор ++ 1
+        Iterator operator++(int){
+            Iterator temp = *this;
+            ++(*this);
+            return temp;
+        }
+        //Оператор ++ 2
+        Iterator& operator++(){
+            if (current != nullptr) { current = current->next; }
+            return *this;
+        }
+    };
+
 };
 
 // Реализация конструктора копирования

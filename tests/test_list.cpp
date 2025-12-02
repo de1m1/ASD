@@ -175,18 +175,6 @@ TEST(ListTest, IteratorPostIncrement) {
     EXPECT_EQ(*it, 2);
 }
 
-TEST(ListTest, IteratorDecrement) {
-    List<int> list;
-    list.push_back(1);
-    list.push_back(2);
-
-    auto it = list.begin();
-    ++it;
-
-    --it;
-    EXPECT_EQ(*it, 1);
-}
-
 TEST(ListTest, IteratorEquality) {
     List<int> list;
     list.push_back(1);

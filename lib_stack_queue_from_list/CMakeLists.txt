@@ -1,0 +1,2 @@
+﻿create_project_lib(stack_queue_from_list)
+target_include_directories(algorithms PUBLIC ../lib_list)

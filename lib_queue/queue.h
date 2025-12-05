@@ -25,7 +25,10 @@ public:
     void pop();
 
     // Получение элемента из начала очереди
-    inline T top() const;
+    inline T front() const;
+
+    // Получение элемента из конца очереди
+    inline T back() const;
 
     // Проверка на пустоту
     inline bool is_empty() const noexcept;
@@ -86,6 +89,9 @@ Queue<T>& Queue<T>::operator=(const Queue& other) {
 // Добавление элемента в конец очереди
 template <class T>
 void Queue<T>::push(const T& val) {
+    if (is_full()) {
+        throw std::overflow_error("Queue::push: Queue is full");
+    }
     int tail = (_head + _count) % _capacity;
     _data[tail] = val;
     _count++;
@@ -94,14 +100,25 @@ void Queue<T>::push(const T& val) {
 // Удаление элемента из начала очереди
 template <class T>
 void Queue<T>::pop() {
+    if (is_empty()) {
+        throw std::overflow_error("Queue::push: Queue is empty");
+    }
     _head = (_head + 1) % _capacity;
     _count--;
 }
 
 // Получение элемента из начала очереди
 template <class T>
-T Queue<T>::top() const {
+T Queue<T>::front() const {
+    if (is_empty()) throw std::underflow_error("Queue is empty");
     return _data[_head];
+}
+
+template <class T>
+T Queue<T>::back() const {
+    if (is_empty()) throw std::underflow_error("Queue is empty");
+    int tail = (_head + _count - 1) % _capacity;
+    return _data[tail];
 }
 
 // Проверка на пустоту
@@ -134,7 +151,3 @@ int Queue<T>::head() const {
     return _head;
 }
 
-template <class T>
-int Queue<T>::count() const {
-    return _count;
-}

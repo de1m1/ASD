@@ -1,28 +1,24 @@
 #include "gtest/gtest.h"
 #include "dsu.h"
 
-TEST(DSUTest, EqualUnion) {
+TEST(DSUTest, InitialState) {
+	DSU dsu(5);
+
+	for (int i = 0; i < 5; i++) {
+		EXPECT_EQ(dsu.find(i), i);
+	}
+}
+
+TEST(DSUTest, BasicUnionFind) {
 	DSU dsu(5);
 
 	dsu.united(0, 1);
 	dsu.united(2, 3);
 
-	EXPECT_EQ(dsu.find(0), dsu.find(1));
-	EXPECT_EQ(dsu.find(2), dsu.find(3));
-	EXPECT_EQ(dsu.find(4), 4);
-}
-
-TEST(DSUTest, NotEqualUnion) {
-	DSU dsu(6);
-
-	dsu.united(4, 5);
-	dsu.united(1, 3);
-	dsu.united(0, 2);
-
-	EXPECT_NE(dsu.find(0), dsu.find(1));
-	EXPECT_NE(dsu.find(2), dsu.find(4));
-	EXPECT_NE(dsu.find(3), dsu.find(5));
-
+	EXPECT_EQ(dsu.find(0), dsu.find(1)); 
+	EXPECT_EQ(dsu.find(2), dsu.find(3));  
+	EXPECT_NE(dsu.find(0), dsu.find(2)); 
+	EXPECT_EQ(dsu.find(4), 4);  
 }
 
 TEST(DSUTest, Transitivnost) {
@@ -36,26 +32,52 @@ TEST(DSUTest, Transitivnost) {
 	EXPECT_EQ(dsu.find(0), dsu.find(2));
 }
 
-TEST(DSUTest, ChainStructure) {
-	DSU dsu(3);
-
-	dsu.united(1, 0);
-	dsu.united(2, 1);
-
-	int root = dsu.find(0);
-	EXPECT_EQ(dsu.find(1), root);
-	EXPECT_EQ(dsu.find(2), root);
-}
-
-TEST(DSUTest, FindAfterMultipleUnions) {
+TEST(DSUTest, RepeatedUnion) {
 	DSU dsu(5);
 
 	dsu.united(0, 1);
-	dsu.united(2, 3);
-	dsu.united(0, 2);
+	dsu.united(0, 1);
+	dsu.united(1, 0);
 
 	EXPECT_EQ(dsu.find(0), dsu.find(1));
-	EXPECT_EQ(dsu.find(0), dsu.find(2));
-	EXPECT_EQ(dsu.find(0), dsu.find(3));
-	EXPECT_EQ(dsu.find(4), 4);
+}
+
+TEST(DSUTest, PathCompressionParentNew) {
+	DSU dsu(5);
+
+	dsu.united(0, 1);
+	dsu.united(1, 2);
+
+	int root = dsu.find(2);
+
+	EXPECT_EQ(dsu.find(0), root);
+	EXPECT_EQ(dsu.find(1), root);
+}
+
+TEST(DSUTest, UnionALot) {
+	DSU dsu(10);
+
+	dsu.united(0, 1);
+	dsu.united(2, 3);
+	dsu.united(1, 2);
+
+	dsu.united(4, 5);
+	dsu.united(5, 6);
+
+	dsu.united(0, 4);
+
+	for (int i = 0; i <= 6; i++) {
+		EXPECT_EQ(dsu.find(i), dsu.find(0));
+	}
+
+	EXPECT_NE(dsu.find(7), dsu.find(0));
+}
+
+TEST(DSUTest, BoundaryÑases) {
+	DSU dsu1(1);
+	EXPECT_EQ(dsu1.find(0), 0);
+
+	DSU dsu3(3);
+	dsu3.united(1, 1);
+	EXPECT_EQ(dsu3.find(1), 1);
 }

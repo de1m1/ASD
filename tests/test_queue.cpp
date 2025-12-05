@@ -1,130 +1,141 @@
 #include <gtest/gtest.h>
-#include "Queue.h"
+#include "queue.h"
 
-TEST(TestQueue, can_create_queue) {
-    // Arrange & Act & Assert
+TEST(TestQueue, CreateQueue) {
     ASSERT_NO_THROW(Queue<int> q(5));
 }
 
-TEST(TestQueue, created_queue_is_empty) {
-    // Arrange
+TEST(TestQueue, CreateQueueEmpty) {
     Queue<int> q(5);
 
-    // Act & Assert
     EXPECT_TRUE(q.is_empty());
 }
 
-TEST(TestQueue, can_push_element) {
-    // Arrange
-    Queue<int> q(5);
+TEST(TestQueue, PushElem) {
+    Queue<int> q(2);
 
-    // Act & Assert
+    q.push(10);
+
     ASSERT_NO_THROW(q.push(10));
+    EXPECT_EQ(q.size(), 2);
 }
 
-TEST(TestQueue, push_increases_size) {
-    // Arrange
-    Queue<int> q(5);
-
-    // Act
+TEST(TestQueue, PopElem) {
+    Queue<int> q(1);
     q.push(10);
 
-    // Assert
-    EXPECT_EQ(q.size(), 1);
-}
-
-TEST(TestQueue, can_pop_element) {
-    // Arrange
-    Queue<int> q(5);
-    q.push(10);
-
-    // Act & Assert
     ASSERT_NO_THROW(q.pop());
-}
 
-TEST(TestQueue, pop_decreases_size) {
-    // Arrange
-    Queue<int> q(5);
-    q.push(10);
     q.push(20);
 
-    // Act
     q.pop();
 
-    // Assert
-    EXPECT_EQ(q.size(), 1);
+    EXPECT_EQ(q.size(), 0);
 }
 
-TEST(TestQueue, top_returns_correct_element) {
-    // Arrange
+TEST(TestQueue, ElemCorrect) {
     Queue<int> q(5);
     q.push(10);
     q.push(20);
 
-    // Act
-    int actual_result = q.top();
+    int actual = q.front();
 
-    // Assert
-    int expected_result = 10;
-    EXPECT_EQ(expected_result, actual_result);
+    int expected = 10;
+    EXPECT_EQ(expected, actual);
 }
 
-TEST(TestQueue, fifo_behavior) {
-    // Arrange
+TEST(TestQueue, FIFO) {
     Queue<int> q(3);
     q.push(1);
     q.push(2);
     q.push(3);
 
-    // Act & Assert
-    EXPECT_EQ(q.top(), 1);
+    EXPECT_EQ(q.front(), 1);
     q.pop();
-    EXPECT_EQ(q.top(), 2);
+    EXPECT_EQ(q.front(), 2);
     q.pop();
-    EXPECT_EQ(q.top(), 3);
+    EXPECT_EQ(q.front(), 3);
 }
 
-TEST(TestQueue, can_clear_queue) {
-    // Arrange
+TEST(TestQueue, ClearQueue) {
     Queue<int> q(5);
     q.push(10);
     q.push(20);
 
-    // Act
     q.clear();
 
-    // Assert
     EXPECT_TRUE(q.is_empty());
     EXPECT_EQ(q.size(), 0);
 }
 
-TEST(TestQueue, becomes_full_when_capacity_reached) {
-    // Arrange
+TEST(TestQueue, FullQueue) {
     Queue<int> q(2);
     q.push(10);
     q.push(20);
 
-    // Act & Assert
     EXPECT_TRUE(q.is_full());
 }
 
-TEST(TestQueue, circular_buffer_works_correctly) {
-    // Arrange
+TEST(TestQueue, CircularWorkCorrect) {
     Queue<int> q(3);
     q.push(1);
     q.push(2);
     q.push(3);
-    q.pop(); // remove 1
-    q.pop(); // remove 2
+    q.pop();
+    q.pop();
 
-    // Act
     q.push(4);
     q.push(5);
 
-    // Assert
-    EXPECT_EQ(q.top(), 3);
+    EXPECT_EQ(q.front(), 3);
     q.pop();
-    EXPECT_EQ(q.top(), 4);
+    EXPECT_EQ(q.front(), 4);
     q.pop();
-    EXPECT_EQ(q.top(), 5);
+    EXPECT_EQ(q.front(), 5);
+}
+
+TEST(TestQueue, ThrowPush) {
+    Queue<int> q(2);
+    q.push(10);
+    q.push(20);
+
+    ASSERT_THROW(q.push(30), std::overflow_error);
+}
+
+TEST(TestQueue, ThrowPop) {
+    Queue<int> q(5);
+
+    ASSERT_THROW(q.pop(), std::overflow_error);
+}
+
+TEST(TestQueue, ThrowFront) {
+    Queue<int> q(5);
+
+    ASSERT_THROW(q.front(), std::underflow_error);
+}
+
+TEST(TestQueue, CopyConstructor) {
+    Queue<int> q1(5);
+    q1.push(1);
+    q1.push(2);
+    q1.push(3);
+
+    Queue<int> q2 = q1;
+
+    EXPECT_EQ(q2.size(), 3);
+    EXPECT_EQ(q2.front(), 1);
+    q2.pop();
+    EXPECT_EQ(q2.front(), 2);
+}
+
+TEST(TestQueue, AssigmentOperator) {
+    Queue<int> q1(5), q2(3);
+    q1.push(10);
+    q1.push(20);
+    q1.push(30);
+
+    q2 = q1;
+
+    EXPECT_EQ(q2.size(), 3);
+    EXPECT_EQ(q2.front(), 10);
 }

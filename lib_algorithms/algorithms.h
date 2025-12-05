@@ -22,3 +22,34 @@ bool check_breckets(const std::string& stk) {
     }
     return brackets.is_empty();
 }
+
+namespace Algorithms {
+
+    template<typename T>
+    bool hasCycleFloyd(typename List<T>::Iterator begin, typename List<T>::Iterator end) {
+        if (begin == end) return false;
+
+        auto slow = begin;
+        auto fast = begin;
+
+        ++fast;
+        if (fast == end) return false;
+
+        while (fast != end) {
+            ++slow;
+
+            ++fast;
+            if (fast == end) return false;
+
+            ++fast;
+
+            if (slow == fast) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+}
+

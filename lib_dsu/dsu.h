@@ -7,13 +7,22 @@ class DSU {
 	int* _rank;
 
 public:
+	// Конструктор
+	DSU(int size);
 
-	DSU(int _size);
+	// Объединение двух множеств
+	void united(int x, int y);
 
-	void united(int, int);
+	// Найти корень множества
+	int find(int x);
 
-	int find(int);
+	// Находятся ли элементы в одном множестве
+	bool connected(int x, int y);
 
+	// Количество элементов
+	size_t size() const;
+
+	// Деструктор
 	~DSU();
 
 };
@@ -29,20 +38,22 @@ DSU::DSU(int size) : _size(size) {
 }
 
 // Объединение
-void DSU::united(int x1, int x2) {
+void DSU::united(int x, int y) {
 
-	x1 = find(x1);
-	x2 = find(x2);
+	x = find(x);
+	y = find(y);
 
-	if (_rank[x1] < _rank[x2]) {
-		_parent[x1] = x2;
+	if (x == y) return;
+
+	if (_rank[x] < _rank[y]) {
+		_parent[x] = y;
 	}
-	else if (_rank[x1] == _rank[x2]) {
-		_rank[x1]++;
-		_parent[x2] = x1;
+	else if (_rank[x] == _rank[y]) {
+		_rank[x]++;
+		_parent[y] = x;
 	}
 	else {
-		_parent[x2] = x1;
+		_parent[y] = x;
 	}
 }
 
@@ -52,6 +63,15 @@ DSU::~DSU() { delete[] _parent; delete[] _rank; }
 // Поиск
 int DSU::find(int x) {
 	if (_parent[x] == x) return x;
-	else return find(_parent[x]);
+	else return _parent[x] = find(_parent[x]);
 }
 
+// Проверка связи между элементами
+bool DSU::connected(int x, int y) {
+	return find(x) == find(y);
+}
+
+// Получение размера
+size_t DSU::size() const {
+	return _size;
+}

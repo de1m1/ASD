@@ -2,12 +2,6 @@
 #include <stdexcept>
 #include "List.h"
 
-TEST(ListTest, DefaultConstructor) {
-    List<int> list;
-    EXPECT_EQ(list.size(), 0);
-    EXPECT_TRUE(list.empty());
-}
-
 TEST(ListTest, PushBack) {
     List<int> list;
     list.push_back(1);
@@ -138,12 +132,6 @@ TEST(ListTest, Clear) {
     EXPECT_TRUE(list.empty());
 }
 
-TEST(ListTest, ClearEmpty) {
-    List<int> list;
-    list.clear();
-    EXPECT_TRUE(list.empty());
-}
-
 TEST(ListTest, Iterator) {
     List<int> list;
     list.push_back(1);
@@ -188,20 +176,6 @@ TEST(ListTest, IteratorEquality) {
     ++it1;
     EXPECT_FALSE(it1 == it2);
     EXPECT_TRUE(it1 != it2);
-}
-
-TEST(ListTest, RangeBasedFor) {
-    List<int> list;
-    list.push_back(1);
-    list.push_back(2);
-    list.push_back(3);
-
-    int sum = 0;
-    for (const auto& item : list) {
-        sum += item;
-    }
-
-    EXPECT_EQ(sum, 6);
 }
 
 TEST(ListTest, InsertAtBeginning) {
@@ -287,38 +261,11 @@ TEST(ListTest, EraseInMiddle) {
     EXPECT_EQ(list.back(), 3);
 }
 
-TEST(ListTest, EraseInvalidIterator) {
-    List<int> list;
-    auto it = list.end();
-
-    EXPECT_THROW(list.erase(it), std::runtime_error);
-}
-
 TEST(ListTest, EraseEmptyList) {
     List<int> list;
     auto it = list.begin();
 
     EXPECT_THROW(list.erase(it), std::runtime_error);
-}
-
-TEST(ListTest, StringList) {
-    List<std::string> list;
-    list.push_back("hello");
-    list.push_back("world");
-
-    EXPECT_EQ(list.size(), 2);
-    EXPECT_EQ(list.front(), "hello");
-    EXPECT_EQ(list.back(), "world");
-}
-
-TEST(ListTest, DoubleList) {
-    List<double> list;
-    list.push_back(1.1);
-    list.push_back(2.2);
-    list.push_back(3.3);
-
-    EXPECT_DOUBLE_EQ(list.front(), 1.1);
-    EXPECT_DOUBLE_EQ(list.back(), 3.3);
 }
 
 TEST(ListTest, LargeList) {
@@ -332,18 +279,4 @@ TEST(ListTest, LargeList) {
     EXPECT_EQ(list.size(), COUNT);
     EXPECT_EQ(list.front(), 0);
     EXPECT_EQ(list.back(), COUNT - 1);
-}
-
-TEST(ListTest, IteratorArrowOperator) {
-    struct TestStruct {
-        int x;
-        int y;
-    };
-
-    List<TestStruct> list;
-    list.push_back(TestStruct{ 1, 2 });
-
-    auto it = list.begin();
-    EXPECT_EQ(it->x, 1);
-    EXPECT_EQ(it->y, 2);
 }

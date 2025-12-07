@@ -147,3 +147,58 @@ TEST(CycleReverseTest, WithCycleUsingTestMethods) {
 
 	EXPECT_FALSE(CheckListCycleReverse(list));
 }
+
+// 3 - метод зайца и черепахи + вовращение начала цикла
+
+TEST(CycleFindStartTest, NoCycle) {
+	List<int> list;
+	list.push_back(1);
+	list.push_back(2);
+	list.push_back(3);
+
+	auto result = FindCycleStartFloyd(list);
+	EXPECT_FALSE(result.first);
+	EXPECT_EQ(result.second, list.end());
+}
+
+TEST(CycleFindStartTest, CycleToHead) {
+	List<int> list;
+	list.push_back(1);
+	list.push_back(2);
+	list.push_back(3);
+	list.push_back(4);
+
+	list.TEST_CreateCycle(0);
+
+	auto result = FindCycleStartFloyd(list);
+	EXPECT_TRUE(result.first);
+
+	EXPECT_NE(result.second, list.end());
+	EXPECT_EQ(*result.second, 1);
+
+	list.TEST_BreakCycle();
+}
+
+TEST(CycleFindStartTest, CycleToMiddle) {
+	List<int> list;
+	list.push_back(10);
+	list.push_back(20);
+	list.push_back(30);
+	list.push_back(40);
+	list.push_back(50);
+
+	list.TEST_CreateCycle(2);
+
+	auto result = FindCycleStartFloyd(list);
+	EXPECT_TRUE(result.first);
+
+	EXPECT_NE(result.second, list.end());
+
+	auto it = list.begin();
+	++it; 
+	++it;
+	EXPECT_EQ(result.second, it);
+	EXPECT_EQ(*result.second, 30);
+
+	list.TEST_BreakCycle();
+}

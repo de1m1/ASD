@@ -165,3 +165,47 @@ bool CheckListCycleReverse(List<T>& list) {
 }
 
 template bool CheckListCycleReverse<int>(List<int>&);
+
+// 3 - метод зайца и черепахи + вовращение начала цикла
+
+template <typename T>
+pair<bool, typename List<T>::Iterator>
+FindCycleStartFloyd(const List<T>& list) {
+    using Iterator = typename List<T>::Iterator;
+
+    if (list.head == nullptr) {
+        return { false, Iterator(nullptr) };
+    }
+
+    typename List<T>::Node* turtle = list.head;
+    typename List<T>::Node* rabbit = list.head;
+
+    bool hasCycle = false;
+
+    while (rabbit != nullptr && rabbit->next != nullptr) {
+        turtle = turtle->next;
+        rabbit = rabbit->next->next;
+
+        if (rabbit == turtle) {
+            hasCycle = true;
+            break;
+        }
+    }
+
+    if (!hasCycle) {
+        return { false, Iterator(nullptr) };
+    }
+
+    typename List<T>::Node* ptr1 = list.head;
+    typename List<T>::Node* ptr2 = turtle;
+
+    while (ptr1 != ptr2) {
+        ptr1 = ptr1->next;
+        ptr2 = ptr2->next;
+    }
+
+    return { true, Iterator(ptr1) };
+}
+
+template std::pair<bool, typename List<int>::Iterator>
+FindCycleStartFloyd<int>(const List<int>&);

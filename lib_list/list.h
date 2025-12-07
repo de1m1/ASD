@@ -86,6 +86,11 @@ public:
     template<typename T>
     friend bool CheckListCycleReverse(List<T>& list);
 
+    // Метод Флойда + возврат начала цикла
+    template<typename T>
+    friend std::pair<bool, typename List<T>::Iterator>
+        FindCycleStartFloyd(const List<T>& list);
+
     // Модификации для тестов
 
     void TEST_CreateCycle(int targetIndex) {

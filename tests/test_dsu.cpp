@@ -1,6 +1,8 @@
 #include "gtest/gtest.h"
 #include "dsu.h"
 
+// Teсты для DSU
+
 TEST(DSUTest, InitialState) {
 	DSU dsu(5);
 

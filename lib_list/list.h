@@ -42,6 +42,7 @@ public:
 
         // Дружественный класс для доступа к приватным членам
         friend class List<T>;
+
     };
     
     // Конструкторы и деструктор
@@ -76,6 +77,35 @@ public:
     // Методы для получения итераторов
     Iterator begin();  // Итератор на первый элемент
     Iterator end();    // Итератор на позицию после последнего элемента
+
+    // Метод Флойда для нахождения цикла
+    template<typename T>
+    friend bool CheckListCycleFloyd(const List<T>& list);
+
+    // Метод разворота указателей для нахождения цикла
+    template<typename T>
+    friend bool CheckListCycleReverse(List<T>& list);
+
+    // Модификации для тестов
+
+    void TEST_CreateCycle(int targetIndex) {
+        if (empty() || targetIndex < 0 || targetIndex >= (int)size_) return;
+
+        Node* target = head;
+        for (int i = 0; i < targetIndex; i++) {
+            target = target->next;
+        }
+
+        if (tail) {
+            tail->next = target;
+        }
+    }
+
+    void TEST_BreakCycle() {
+        if (tail) {
+            tail->next = nullptr;
+        }
+    }
 };
 
 // Iterator

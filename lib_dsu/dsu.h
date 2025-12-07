@@ -8,27 +8,26 @@ class DSU {
 
 public:
 	// Конструктор
-	DSU(int size);
+	inline DSU(int size);
 
 	// Объединение двух множеств
-	void united(int x, int y);
+	inline void united(int x, int y);
 
 	// Найти корень множества
-	int find(int x);
+	inline int find(int x);
 
 	// Находятся ли элементы в одном множестве
-	bool connected(int x, int y);
+	inline bool connected(int x, int y);
 
 	// Количество элементов
-	size_t size() const;
+	inline size_t size() const;
 
 	// Деструктор
-	~DSU();
-
+	inline ~DSU();
 };
 
 // Конструктор
-DSU::DSU(int size) : _size(size) {
+inline DSU::DSU(int size) : _size(size) {
 	_parent = new int[_size];
 	_rank = new int[_size];
 	for (int i = 0; i < _size; i++) {
@@ -38,7 +37,7 @@ DSU::DSU(int size) : _size(size) {
 }
 
 // Объединение
-void DSU::united(int x, int y) {
+inline void DSU::united(int x, int y) {
 
 	x = find(x);
 	y = find(y);
@@ -58,20 +57,20 @@ void DSU::united(int x, int y) {
 }
 
 // Деструктор
-DSU::~DSU() { delete[] _parent; delete[] _rank; }
+inline DSU::~DSU() { delete[] _parent; delete[] _rank; }
 
 // Поиск
-int DSU::find(int x) {
+inline int DSU::find(int x) {
 	if (_parent[x] == x) return x;
 	else return _parent[x] = find(_parent[x]);
 }
 
 // Проверка связи между элементами
-bool DSU::connected(int x, int y) {
+inline bool DSU::connected(int x, int y) {
 	return find(x) == find(y);
 }
 
 // Получение размера
-size_t DSU::size() const {
+inline size_t DSU::size() const {
 	return _size;
 }

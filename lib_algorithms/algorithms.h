@@ -1,9 +1,17 @@
-#pragma once
+﻿#pragma once
 
+#include <vector>
+#include <unordered_set>
+#include <unordered_map>
 #include "stack.h"
 #include "list.h"
+#include "dsu.h"
 
-bool check_breckets(const std::string& stk) {
+using namespace std;
+
+// Скобки через Stack
+
+bool check_brackets(const std::string& stk) {
     stack<char> brackets;
     for (auto b : stk) {
         if (b == '(' || b == '{' || b == '[') {
@@ -23,33 +31,137 @@ bool check_breckets(const std::string& stk) {
     return brackets.is_empty();
 }
 
-namespace Algorithms {
+// Задача из DSU
 
-    template<typename T>
-    bool hasCycleFloyd(typename List<T>::Iterator begin, typename List<T>::Iterator end) {
-        if (begin == end) return false;
+inline int toIndex(int row, int col, int cols) {
+    return row * cols + col;
+}
 
-        auto slow = begin;
-        auto fast = begin;
+int countIslands(const vector<vector<int>>& grid) {
 
-        ++fast;
-        if (fast == end) return false;
+    if (grid.empty() || grid[0].empty()) {
+        return 0;
+    }
 
-        while (fast != end) {
-            ++slow;
+    int rows = grid.size();
+    int cols = grid[0].size();
+    int totalCells = rows * cols;
 
-            ++fast;
-            if (fast == end) return false;
+    DSU dsu(totalCells);
 
-            ++fast;
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
 
-            if (slow == fast) {
-                return true;
+            if (grid[i][j] == 1) {
+
+                int currentIdx = toIndex(i, j, cols);
+
+                if (j + 1 < cols && grid[i][j + 1] == 1) {
+                    int rightIdx = toIndex(i, j + 1, cols);
+                    dsu.united(currentIdx, rightIdx);
+                }
+
+                if (i + 1 < rows && grid[i + 1][j] == 1) {
+                    int downIdx = toIndex(i + 1, j, cols);
+                    dsu.united(currentIdx, downIdx);
+                }
             }
         }
+    }
+    unordered_set<int> uniqueRoots;
 
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+
+            if (grid[i][j] == 1) {
+
+                int idx = toIndex(i, j, cols);
+
+                int root = dsu.find(idx);
+
+                uniqueRoots.insert(root);
+            }
+        }
+    }
+    return uniqueRoots.size();
+}
+
+// Методы нахождения цикла в списке
+
+template <typename T>
+bool CheckListCycleFloyd(const List<T>& list){
+
+    if (list.head == nullptr || list.head->next == nullptr) return false;
+    
+    typename List<T>::Node* rabbit = list.head;
+    typename List<T>::Node* turtle = list.head;
+
+    while (rabbit != nullptr && rabbit->next != nullptr) {
+        turtle = turtle->next;
+        rabbit = rabbit->next->next;
+
+        if (rabbit == turtle) return true;
+
+    }
+    return false;
+}
+
+template bool CheckListCycleFloyd<int>(const List<int>&);
+
+// 2 - метод разворота указателей
+
+template <typename T>
+bool CheckListCycleReverse(List<T>& list) {
+    using Node = typename List<T>::Node;
+
+    if (list.head == nullptr || list.head->next == nullptr) {
         return false;
     }
 
+    Node* current = list.head;
+    Node* prev = nullptr;
+    Node* next = nullptr;
+
+    while (current != nullptr) {
+        next = current->next;
+        current->next = prev;
+
+        if (next == list.head) {
+            Node* restore_current = current;
+            Node* restore_prev = nullptr;
+
+            while (restore_current != nullptr) {
+                Node* restore_next = restore_current->next;
+                restore_current->next = restore_prev;
+                restore_prev = restore_current;
+                restore_current = restore_next;
+
+                if (restore_prev == list.head) {
+                    break;
+                }
+            }
+            return true;
+        }
+
+        prev = current;
+        current = next;
+    }
+
+    Node* restore_current = prev;
+    Node* restore_prev = nullptr;
+
+    while (restore_current != nullptr) {
+        Node* restore_next = restore_current->next;
+        restore_current->next = restore_prev;
+        restore_prev = restore_current;
+        restore_current = restore_next;
+
+        if (restore_prev == list.head) {
+            break;
+        }
+    }
+
+    return false;
 }
 
+template bool CheckListCycleReverse<int>(List<int>&);

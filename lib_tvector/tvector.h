@@ -6,6 +6,7 @@ using namespace std;
 template<typename T>
 class TVector {
 private:
+
     T* data;
     size_t size_;
     size_t capacity_;
@@ -59,13 +60,13 @@ public:
 
     // Вставки
     void push_back(const T& value);
+
+    // Удаление
     void pop_back();
 
-    // Оператор []
+    // Операторы доступа по индексу
     T& operator[](size_t index);
     const T& operator[](size_t index) const;
-
-    // Вставки
     T& at(size_t index);
     const T& at(size_t index) const;
 
@@ -85,13 +86,33 @@ public:
 // 
 template<typename T>
 void TVector<T>::resize(size_t new_capacity) {
-    T* new_data = new T[new_capacity];
-    for (size_t i = 0; i < size_; ++i) {
-        new_data[i] = data[i];
+    if (new_capacity == capacity_) return;
+
+    T* new_data = nullptr;
+    try {
+        new_data = new T[new_capacity];
+        
+        size_t elements_to_copy = min(size_, new_capacity);
+        for (size_t i = 0; i < elements_to_copy; ++i) {
+            new_data[i] = move_if_noexcept(data[i]);
+        }
+
+        if (new_capacity < size_) {
+            for (size_t i = new_capacity; i < size_; ++i) {
+                data[i].~T();
+            }
+        }
+
+        delete[] data;
+        data = new_data;
+        capacity_ = new_capacity;
+        size_ = min(size_, new_capacity);  
+
     }
-    delete[] data;
-    data = new_data;
-    capacity_ = new_capacity;
+    catch (...) {
+        delete[] new_data;
+        throw;
+    }
 }
 
 // Конструкторы
@@ -140,15 +161,17 @@ TVector<T>& TVector<T>::operator=(const TVector& other) {
     return *this;
 }
 
-// Вставки
+// Вставка
 template<typename T>
 void TVector<T>::push_back(const T& value) {
     if (size_ >= capacity_) {
-        resize(capacity_ == 0 ? 1 : capacity_ * 2);
+        if (capacity_ == 0) resize(1);
+        else resize(capacity_ * 2);
     }
     data[size_++] = value;
 }
 
+// Удаление
 template<typename T>
 void TVector<T>::pop_back() {
     if (empty()) {
@@ -157,6 +180,7 @@ void TVector<T>::pop_back() {
     --size_;
 }
 
+// Оператор доступа по индексу без проверки границ
 template<typename T>
 T& TVector<T>::operator[](size_t index) {
     return data[index];
@@ -167,6 +191,7 @@ const T& TVector<T>::operator[](size_t index) const {
     return data[index];
 }
 
+// Оператор доступа по индексу с проверкой границ
 template<typename T>
 T& TVector<T>::at(size_t index) {
     if (index >= size_) {

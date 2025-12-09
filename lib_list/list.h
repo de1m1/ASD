@@ -1,5 +1,6 @@
 #pragma once
 #include <stdexcept>
+using namespace std;
 
 template<typename T>
 class List {
@@ -200,7 +201,7 @@ void List<T>::push_front(const T& value) {
 template<typename T>
 void List<T>::pop_front() {
 
-    if (empty()) throw std::runtime_error("List is empty!");
+    if (empty()) throw runtime_error("List is empty!");
 
     Node* oldHead = head;
     head = head->next;
@@ -216,7 +217,7 @@ void List<T>::pop_front() {
 template<typename T>
 void List<T>::pop_back() {
 
-    if (empty()) throw std::runtime_error("List is empty!");
+    if (empty()) throw runtime_error("List is empty!");
 
     if (head == tail) { delete head; head = tail = nullptr; }
 
@@ -250,26 +251,26 @@ void List<T>::clear() {
 // Получение первого элемента списка
 template<typename T>
 T& List<T>::front() {
-    if (empty()) throw std::runtime_error("List is empty!");
+    if (empty()) throw runtime_error("List is empty!");
     return head->data;
 }
 
 template<typename T>
 const T& List<T>::front() const {
-    if (empty()) throw std::runtime_error("List is empty!");
+    if (empty()) throw runtime_error("List is empty!");
     return head->data;
 }
 
 // Получение последнего элемента списка
 template<typename T>
 T& List<T>::back() {
-    if (empty()) throw std::runtime_error("List is empty!");
+    if (empty()) throw runtime_error("List is empty!");
     return tail->data;
 }
 
 template<typename T>
 const T& List<T>::back() const {
-    if (empty()) throw std::runtime_error("List is empty!");
+    if (empty()) throw runtime_error("List is empty!");
     return tail->data;
 }
 
@@ -310,7 +311,7 @@ void List<T>::insert(const Iterator& pos, const T& value) {
 
         if (!current) {
             delete newNode;
-            throw std::runtime_error("Invalid iterator!");
+            throw runtime_error("Invalid iterator!");
         }
 
         // Вставляем новый узел между current и pos.current
@@ -325,17 +326,15 @@ void List<T>::insert(const Iterator& pos, const T& value) {
 template<typename T>
 void List<T>::erase(const Iterator& pos) {
     if (pos == end() || empty()) {
-        throw std::runtime_error("Invalid iterator!");
+        throw runtime_error("Invalid iterator!");
     }
 
     if (pos.current == head) {
         pop_front();
-        return;
     }
 
     else if (pos.current == tail) {
         pop_back();
-        return;
     }
     else {
         // Находим узел, предшествующий pos
@@ -344,18 +343,13 @@ void List<T>::erase(const Iterator& pos) {
             current = current->next;
         }
 
-        if (!current || !current->next) {
-            throw std::runtime_error("Invalid iterator!");
+        if (!current) {
+            throw runtime_error("Invalid iterator!");
         }
 
         Node* toDelete = current->next;
 
-        // Перестраиваем связи
         current->next = toDelete->next;
-
-        if (toDelete == tail) {
-            tail = current;
-        }
     
     delete toDelete;
     size_--;

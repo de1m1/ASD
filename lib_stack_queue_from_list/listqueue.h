@@ -15,7 +15,7 @@ public:
     lstqueue<T>& operator=(const lstqueue<T>& other);
 
     // Добавление элемента в конец очереди
-    void push(const T& val) noexcept;
+    void push(const T& val);
 
     // Удаление элемента из начала очереди
     void pop();
@@ -59,7 +59,7 @@ lstqueue<T>& lstqueue<T>::operator=(const lstqueue<T>& other) {
 
 // Добавление элемента в конец очереди
 template <class T>
-void lstqueue<T>::push(const T& val) noexcept {
+void lstqueue<T>::push(const T& val) {
     _queue.push_back(val);
 }
 
@@ -67,7 +67,7 @@ void lstqueue<T>::push(const T& val) noexcept {
 template <class T>
 void lstqueue<T>::pop() {
     if (empty()) {
-        throw std::logic_error("lstqueue is empty");
+        throw logic_error("lstqueue is empty");
     }
     _queue.pop_front();
 }
@@ -76,7 +76,7 @@ void lstqueue<T>::pop() {
 template <class T>
 T& lstqueue<T>::front() {
     if (empty()) {
-        throw std::logic_error("lstqueue is empty");
+        throw logic_error("lstqueue is empty");
     }
     return *_queue.begin();
 }
@@ -84,7 +84,7 @@ T& lstqueue<T>::front() {
 template <class T>
 const T& lstqueue<T>::front() const {
     if (empty()) {
-        throw std::logic_error("lstqueue is empty");
+        throw logic_error("lstqueue is empty");
     }
     return *_queue.begin();
 }
@@ -93,7 +93,7 @@ const T& lstqueue<T>::front() const {
 template <class T>
 T& lstqueue<T>::back() {
     if (empty()) {
-        throw std::logic_error("lstqueue is empty");
+        throw logic_error("lstqueue is empty");
     }
     return _queue.back();
 }
@@ -101,7 +101,7 @@ T& lstqueue<T>::back() {
 template <class T>
 const T& lstqueue<T>::back() const {
     if (empty()) {
-        throw std::logic_error("lstqueue is empty");
+        throw logic_error("lstqueue is empty");
     }
     return _queue.back();
 }

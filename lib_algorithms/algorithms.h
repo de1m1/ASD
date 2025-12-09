@@ -11,7 +11,7 @@ using namespace std;
 
 // Скобки через Stack
 
-bool check_brackets(const std::string& stk) {
+bool check_brackets(const string& stk) {
     stack<char> brackets;
     for (auto b : stk) {
         if (b == '(' || b == '{' || b == '[') {
@@ -88,6 +88,8 @@ int countIslands(const vector<vector<int>>& grid) {
 
 // Методы нахождения цикла в списке
 
+// 1 - метод Флойда
+
 template <typename T>
 bool CheckListCycleFloyd(const List<T>& list){
 
@@ -100,7 +102,7 @@ bool CheckListCycleFloyd(const List<T>& list){
         turtle = turtle->next;
         rabbit = rabbit->next->next;
 
-        if (rabbit == turtle) return true;
+        if (rabbit == turtle) return true;  
 
     }
     return false;
@@ -207,5 +209,5 @@ FindCycleStartFloyd(const List<T>& list) {
     return { true, Iterator(ptr1) };
 }
 
-template std::pair<bool, typename List<int>::Iterator>
+template pair<bool, typename List<int>::Iterator>
 FindCycleStartFloyd<int>(const List<int>&);

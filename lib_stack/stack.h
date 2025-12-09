@@ -1,7 +1,6 @@
 #pragma once
-#include <iostream>
-#include <math.h>
 #include <stdexcept>
+using namespace std;
 
 template <class T>
 class stack {
@@ -12,7 +11,7 @@ class stack {
 
 public:
     // Конструктор с параметром по умолчанию
-    stack(int size = 100);
+    stack(int size = 16);
 
     // Деструктор
     ~stack();
@@ -58,7 +57,7 @@ stack<T>::~stack() {
 template <class T>
 void stack<T>::push(const T& val) {
     if (is_full()) {
-        throw std::logic_error("Stack is full");
+        throw logic_error("Stack is full");
     }
     _data[++_top] = val;
     _count++;
@@ -68,7 +67,7 @@ void stack<T>::push(const T& val) {
 template <class T>
 void stack<T>::pop() {
     if (is_empty()) {
-        throw std::logic_error("Stack is empty");
+        throw logic_error("Stack is empty");
     }
     --_top;
     --_count;
@@ -78,7 +77,7 @@ void stack<T>::pop() {
 template <class T>
 T stack<T>::top() const {
     if (is_empty()) {
-        throw std::logic_error("Stack is empty");
+        throw logic_error("Stack is empty");
     }
     return _data[_top];
 }

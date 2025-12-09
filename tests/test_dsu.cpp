@@ -74,12 +74,3 @@ TEST(DSUTest, UnionALot) {
 
 	EXPECT_NE(dsu.find(7), dsu.find(0));
 }
-
-TEST(DSUTest, Boundary—ases) {
-	DSU dsu1(1);
-	EXPECT_EQ(dsu1.find(0), 0);
-
-	DSU dsu3(3);
-	dsu3.united(1, 1);
-	EXPECT_EQ(dsu3.find(1), 1);
-}

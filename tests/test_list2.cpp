@@ -52,5 +52,4 @@ TEST(DoublyLinkedListIterator, ReadOperation) {
     EXPECT_EQ(*it, 15);
     ++it;
     EXPECT_EQ(it, my_list.end());
-
 }

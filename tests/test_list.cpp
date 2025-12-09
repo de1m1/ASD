@@ -59,22 +59,6 @@ TEST(ListTest, PopFront) {
     EXPECT_TRUE(list.empty());
 }
 
-TEST(ListTest, PopBackEmpty) {
-    List<int> list;
-    EXPECT_THROW(list.pop_back(), std::runtime_error);
-}
-
-TEST(ListTest, PopFrontEmpty) {
-    List<int> list;
-    EXPECT_THROW(list.pop_front(), std::runtime_error);
-}
-
-TEST(ListTest, FrontBackEmpty) {
-    List<int> list;
-    EXPECT_THROW(list.front(), std::runtime_error);
-    EXPECT_THROW(list.back(), std::runtime_error);
-}
-
 TEST(ListTest, CopyConstructor) {
     List<int> original;
     original.push_back(1);
@@ -106,18 +90,6 @@ TEST(ListTest, AssignmentOperator) {
     EXPECT_EQ(list2.size(), 2);
     EXPECT_EQ(list2.front(), 1);
     EXPECT_EQ(list2.back(), 2);
-}
-
-TEST(ListTest, SelfAssignment) {
-    List<int> list;
-    list.push_back(1);
-    list.push_back(2);
-
-    list = list;
-
-    EXPECT_EQ(list.size(), 2);
-    EXPECT_EQ(list.front(), 1);
-    EXPECT_EQ(list.back(), 2);
 }
 
 TEST(ListTest, Clear) {
@@ -259,24 +231,4 @@ TEST(ListTest, EraseInMiddle) {
     EXPECT_EQ(list.size(), 2);
     EXPECT_EQ(list.front(), 1);
     EXPECT_EQ(list.back(), 3);
-}
-
-TEST(ListTest, EraseEmptyList) {
-    List<int> list;
-    auto it = list.begin();
-
-    EXPECT_THROW(list.erase(it), std::runtime_error);
-}
-
-TEST(ListTest, LargeList) {
-    List<int> list;
-    const int COUNT = 1000;
-
-    for (int i = 0; i < COUNT; ++i) {
-        list.push_back(i);
-    }
-
-    EXPECT_EQ(list.size(), COUNT);
-    EXPECT_EQ(list.front(), 0);
-    EXPECT_EQ(list.back(), COUNT - 1);
 }

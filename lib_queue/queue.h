@@ -1,4 +1,5 @@
 #pragma once
+using namespace std;
 
 template <class T>
 class Queue {
@@ -72,16 +73,19 @@ Queue<T>::~Queue() {
 template <class T>
 Queue<T>& Queue<T>::operator=(const Queue& other) {
     if (this != &other) {
+        T* new_data = new T[other._capacity];
+
+        for (int i = 0; i < other._count; ++i) {
+            int index = (other._head + i) % other._capacity;
+            new_data[i] = other._data[index];
+        }
+
         delete[] _data;
 
         _capacity = other._capacity;
-        _data = new T[_capacity];
-        _head = other._head;
+        _data = new_data;
+        _head = 0;
         _count = other._count;
-
-        for (int i = 0; i < _capacity; ++i) {
-            _data[i] = other._data[i];
-        }
     }
     return *this;
 }
@@ -90,7 +94,7 @@ Queue<T>& Queue<T>::operator=(const Queue& other) {
 template <class T>
 void Queue<T>::push(const T& val) {
     if (is_full()) {
-        throw std::overflow_error("Queue::push: Queue is full");
+        throw overflow_error("Queue::push: Queue is full");
     }
     int tail = (_head + _count) % _capacity;
     _data[tail] = val;
@@ -101,7 +105,7 @@ void Queue<T>::push(const T& val) {
 template <class T>
 void Queue<T>::pop() {
     if (is_empty()) {
-        throw std::overflow_error("Queue::push: Queue is empty");
+        throw overflow_error("Queue::pop: Queue is empty");
     }
     _head = (_head + 1) % _capacity;
     _count--;
@@ -110,13 +114,13 @@ void Queue<T>::pop() {
 // Получение элемента из начала очереди
 template <class T>
 T Queue<T>::front() const {
-    if (is_empty()) throw std::underflow_error("Queue is empty");
+    if (is_empty()) throw underflow_error("Queue is empty");
     return _data[_head];
 }
 
 template <class T>
 T Queue<T>::back() const {
-    if (is_empty()) throw std::underflow_error("Queue is empty");
+    if (is_empty()) throw underflow_error("Queue is empty");
     int tail = (_head + _count - 1) % _capacity;
     return _data[tail];
 }

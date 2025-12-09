@@ -1,6 +1,7 @@
 #pragma once
 #include <cstddef>
 #include <stdexcept>
+using namespace std;
 
 template<typename T>
 class List {
@@ -36,20 +37,20 @@ public:
         }
 
         Iterator& operator--() {
-            current = current->prev;
+            if (current != nullptr) { current = current->prev; }
             return *this;
         }
 
         // Постфиксные инкременты  
         Iterator operator++(int) {
             Iterator temp = *this;
-            current = current->next;
+            if (current) {current = current->prev;}
             return temp;
         }
 
         Iterator operator--(int) {
             Iterator temp = *this;
-            current = current->prev;
+            --(*this);
             return temp;
         }
 
@@ -162,7 +163,7 @@ void List<T>::push_front(const T& value) {
 template<typename T>
 void List<T>::pop_back() {
     if (empty()) {
-        throw std::runtime_error("List is empty!");
+        throw runtime_error("List is empty!");
     }
 
     if (head == tail) {
@@ -183,7 +184,7 @@ void List<T>::pop_back() {
 template<typename T>
 void List<T>::pop_front() {
     if (empty()) {
-        throw std::runtime_error("List is empty!");
+        throw runtime_error("List is empty!");
     }
 
     if (head == tail) {
@@ -204,7 +205,7 @@ void List<T>::pop_front() {
 template<typename T>
 T& List<T>::front() {
     if (empty()) {
-        throw std::runtime_error("List is empty!");
+        throw runtime_error("List is empty!");
     }
     return head->data;
 }
@@ -212,7 +213,7 @@ T& List<T>::front() {
 template<typename T>
 const T& List<T>::front() const {
     if (empty()) {
-        throw std::runtime_error("List is empty!");
+        throw runtime_error("List is empty!");
     }
     return head->data;
 }
@@ -221,7 +222,7 @@ const T& List<T>::front() const {
 template<typename T>
 T& List<T>::back() {
     if (empty()) {
-        throw std::runtime_error("List is empty!");
+        throw runtime_error("List is empty!");
     }
     return tail->data;
 }
@@ -229,7 +230,7 @@ T& List<T>::back() {
 template<typename T>
 const T& List<T>::back() const {
     if (empty()) {
-        throw std::runtime_error("List is empty!");
+        throw runtime_error("List is empty!");
     }
     return tail->data;
 }
@@ -275,7 +276,7 @@ void List<T>::insert(const Iterator& pos, const T& value) {
 template<typename T>
 void List<T>::erase(const Iterator& pos) {
     if (pos == end() || empty()) {
-        throw std::runtime_error("Invalid iterator!");
+        throw runtime_error("Invalid iterator!");
     }
 
     Node* toDelete = pos.current;

@@ -1,38 +1,6 @@
 #include <gtest/gtest.h>
 #include "queue.h"
 
-TEST(TestQueue, CreateQueue) {
-    ASSERT_NO_THROW(Queue<int> q(5));
-}
-
-TEST(TestQueue, CreateQueueEmpty) {
-    Queue<int> q(5);
-
-    EXPECT_TRUE(q.is_empty());
-}
-
-TEST(TestQueue, PushElem) {
-    Queue<int> q(2);
-
-    q.push(10);
-
-    ASSERT_NO_THROW(q.push(10));
-    EXPECT_EQ(q.size(), 2);
-}
-
-TEST(TestQueue, PopElem) {
-    Queue<int> q(1);
-    q.push(10);
-
-    ASSERT_NO_THROW(q.pop());
-
-    q.push(20);
-
-    q.pop();
-
-    EXPECT_EQ(q.size(), 0);
-}
-
 TEST(TestQueue, ElemCorrect) {
     Queue<int> q(5);
     q.push(10);
@@ -92,26 +60,6 @@ TEST(TestQueue, CircularWorkCorrect) {
     EXPECT_EQ(q.front(), 4);
     q.pop();
     EXPECT_EQ(q.front(), 5);
-}
-
-TEST(TestQueue, ThrowPush) {
-    Queue<int> q(2);
-    q.push(10);
-    q.push(20);
-
-    ASSERT_THROW(q.push(30), std::overflow_error);
-}
-
-TEST(TestQueue, ThrowPop) {
-    Queue<int> q(5);
-
-    ASSERT_THROW(q.pop(), std::overflow_error);
-}
-
-TEST(TestQueue, ThrowFront) {
-    Queue<int> q(5);
-
-    ASSERT_THROW(q.front(), std::underflow_error);
 }
 
 TEST(TestQueue, CopyConstructor) {

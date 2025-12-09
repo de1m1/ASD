@@ -16,7 +16,7 @@ public:
     lststack<T>& operator=(const lststack<T>& other);
 
     // Добавление элемента на стек
-    void push(const T& val) noexcept;
+    void push(const T& val);
 
     // Удаление элемента с вершины стека
     void pop();
@@ -57,7 +57,7 @@ lststack<T>& lststack<T>::operator=(const lststack<T>& other) {
 
 // Добавление элемента на стек
 template <class T>
-void lststack<T>::push(const T& val) noexcept {
+void lststack<T>::push(const T& val) {
     _stack.push_front(val);
 }
 
@@ -65,7 +65,7 @@ void lststack<T>::push(const T& val) noexcept {
 template <class T>
 void lststack<T>::pop() {
     if (empty()) {
-        throw std::logic_error("lststack is empty");
+        throw logic_error("lststack is empty");
     }
     _stack.pop_front();
 }
@@ -74,7 +74,7 @@ void lststack<T>::pop() {
 template <class T>
 T& lststack<T>::top() {
     if (empty()) {
-        throw std::logic_error("lststack is empty");
+        throw logic_error("lststack is empty");
     }
     return *_stack.begin();
 }
@@ -82,7 +82,7 @@ T& lststack<T>::top() {
 template <class T>
 const T& lststack<T>::top() const {
     if (empty()) {
-        throw std::logic_error("lststack is empty");
+        throw logic_error("lststack is empty");
     }
     return *_stack.begin();
 }

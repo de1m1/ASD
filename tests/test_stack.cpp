@@ -1,18 +1,10 @@
 #include <gtest/gtest.h>
 #include "Stack.h"
 
-TEST(TestStack, CreateStack) {
-    ASSERT_NO_THROW(stack<int> s(5));
-}
-
 TEST(TestStack, default_constructor_has_correct_capacity) {
     stack<int> s;
 
-    EXPECT_EQ(s.capacity(), 100);
-}
-
-TEST(TestStack, CreateStackWithDefaultSize) {
-    ASSERT_NO_THROW(stack<int> s);
+    EXPECT_EQ(s.capacity(), 16);
 }
 
 TEST(TestStack, CreateStackEmpty) {

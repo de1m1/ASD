@@ -11,13 +11,13 @@ public:
 	inline DSU(int size);
 
 	// Объединение двух множеств
-	inline void united(int x, int y);
+	inline void unite(int x, int y);
 
 	// Найти корень множества
 	inline int find(int x);
 
 	// Находятся ли элементы в одном множестве
-	inline bool connected(int x, int y);
+	inline bool is_connected(int x, int y);
 
 	// Количество элементов
 	inline size_t size() const;
@@ -37,7 +37,7 @@ inline DSU::DSU(int size) : _size(size) {
 }
 
 // Объединение
-inline void DSU::united(int x, int y) {
+inline void DSU::unite(int x, int y) {
 
 	x = find(x);
 	y = find(y);
@@ -66,7 +66,7 @@ inline int DSU::find(int x) {
 }
 
 // Проверка связи между элементами
-inline bool DSU::connected(int x, int y) {
+inline bool DSU::is_connected(int x, int y) {
 	return find(x) == find(y);
 }
 

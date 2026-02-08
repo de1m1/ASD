@@ -75,6 +75,9 @@ public:
     size_t size() const;
     bool empty() const;
 
+    // Поиск
+    T& find(const T* val);
+
     // Методы для получения итераторов
     Iterator begin();  // Итератор на первый элемент
     Iterator end();    // Итератор на позицию после последнего элемента
@@ -363,6 +366,18 @@ size_t List<T>::size() const { return size_; }
 // Проверка, пуст ли список
 template<typename T>
 bool List<T>::empty() const { return size_ == 0; }
+
+// Поиск
+
+template<typename T>
+T& List<T>::find(const T* val){
+    Node* current = _head;
+    while (current != nullptr) {
+        if (current->value == val) return current;
+        current = current->next;
+    }
+    return nullptr;
+}
 
 // Получение итератора на первый элемент
 template<typename T>

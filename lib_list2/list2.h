@@ -4,7 +4,7 @@
 using namespace std;
 
 template<typename T>
-class List {
+class ListDouble {
 private:
     struct Node {
         T data;
@@ -30,21 +30,21 @@ public:
         T& operator*() { return current->data; }
         T* operator->() { return &current->data; }
 
-        // Префиксные инкременты
+        // Префиксные инкремент и декремент
         Iterator& operator++() {
             current = current->next;
             return *this;
         }
 
         Iterator& operator--() {
-            if (current != nullptr) { current = current->prev; }
+            current = current->prev;
             return *this;
         }
 
-        // Постфиксные инкременты  
+        // Постфиксные инкременты  и декремент
         Iterator operator++(int) {
             Iterator temp = *this;
-            if (current) {current = current->prev;}
+            ++(*this);
             return temp;
         }
 
@@ -58,14 +58,14 @@ public:
         bool operator!=(const Iterator& other) const { return current != other.current; }
         bool operator==(const Iterator& other) const { return current == other.current; }
 
-        friend class List<T>;
+        friend class ListDouble<T>;
 
     };
 
     // Конструкторы
-    List() : head(nullptr), tail(nullptr), size_(0) {}
+    ListDouble() : head(nullptr), tail(nullptr), size_(0) {}
 
-    List(const List& other) : head(nullptr), tail(nullptr), size_(0) {
+    ListDouble(const ListDouble& other) : head(nullptr), tail(nullptr), size_(0) {
         Node* current = other.head;
         while (current != nullptr) {
             push_back(current->data);
@@ -74,7 +74,7 @@ public:
     }
 
     // Деструктор
-    ~List();
+    ~ListDouble();
 
     // Основные методы
     void push_back(const T& value);
@@ -92,7 +92,7 @@ public:
     const T& back() const;
 
     // Оператор присваивания 
-    List& operator=(const List& other);
+    ListDouble& operator=(const ListDouble& other);
 
     // Вставка и удаление по позиции
     void insert(const Iterator& pos, const T& value);
@@ -102,14 +102,19 @@ public:
     size_t size() const { return size_; }
     bool empty() const { return size_ == 0; }
 
+    // Итераторы обратно
+    Iterator rbegin() { return Iterator(tail); }
+    Iterator rend() { return Iterator(nullptr); }
+
     // Итераторы
     Iterator begin() { return Iterator(head); }
     Iterator end() { return Iterator(nullptr); }
+
 };
 
 // Вставка в конец
 template<typename T>
-void List<T>::push_back(const T& value) {
+void ListDouble<T>::push_back(const T& value) {
     Node* newNode = new Node(value);
 
     if (empty()) {
@@ -126,13 +131,13 @@ void List<T>::push_back(const T& value) {
 
 // Деструктор
 template<typename T>
-List<T>::~List() {
+ListDouble<T>::~ListDouble() {
     clear();
 }
 
 // Очистка
 template<typename T>
-void List<T>::clear() {
+void ListDouble<T>::clear() {
     while (head != nullptr) {
         Node* temp = head;
         head = head->next;
@@ -144,7 +149,7 @@ void List<T>::clear() {
 
 // Вставка в начало
 template<typename T>
-void List<T>::push_front(const T& value) {
+void ListDouble<T>::push_front(const T& value) {
     Node* newNode = new Node(value);
 
     if (empty()) {
@@ -161,7 +166,7 @@ void List<T>::push_front(const T& value) {
 
 // Удаление с конца
 template<typename T>
-void List<T>::pop_back() {
+void ListDouble<T>::pop_back() {
     if (empty()) {
         throw runtime_error("List is empty!");
     }
@@ -182,7 +187,7 @@ void List<T>::pop_back() {
 
 // Удаление с начала
 template<typename T>
-void List<T>::pop_front() {
+void ListDouble<T>::pop_front() {
     if (empty()) {
         throw runtime_error("List is empty!");
     }
@@ -203,7 +208,7 @@ void List<T>::pop_front() {
 
 // Доступ к 1 элементу
 template<typename T>
-T& List<T>::front() {
+T& ListDouble<T>::front() {
     if (empty()) {
         throw runtime_error("List is empty!");
     }
@@ -211,7 +216,7 @@ T& List<T>::front() {
 }
 
 template<typename T>
-const T& List<T>::front() const {
+const T& ListDouble<T>::front() const {
     if (empty()) {
         throw runtime_error("List is empty!");
     }
@@ -220,7 +225,7 @@ const T& List<T>::front() const {
 
 // Доступ к последнему элементу
 template<typename T>
-T& List<T>::back() {
+T& ListDouble<T>::back() {
     if (empty()) {
         throw runtime_error("List is empty!");
     }
@@ -228,7 +233,7 @@ T& List<T>::back() {
 }
 
 template<typename T>
-const T& List<T>::back() const {
+const T& ListDouble<T>::back() const {
     if (empty()) {
         throw runtime_error("List is empty!");
     }
@@ -237,7 +242,7 @@ const T& List<T>::back() const {
 
 // Оператор присваивания
 template<typename T>
-List<T>& List<T>::operator=(const List& other) {
+ListDouble<T>& ListDouble<T>::operator=(const ListDouble& other) {
     if (this != &other) {
         clear();
         Node* current = other.head;
@@ -251,7 +256,7 @@ List<T>& List<T>::operator=(const List& other) {
 
 // Вставка по позиции
 template<typename T>
-void List<T>::insert(const Iterator& pos, const T& value) {
+void ListDouble<T>::insert(const Iterator& pos, const T& value) {
     if (pos == begin()) {
         push_front(value);
     }
@@ -274,7 +279,7 @@ void List<T>::insert(const Iterator& pos, const T& value) {
 
 // Удаление по позиции
 template<typename T>
-void List<T>::erase(const Iterator& pos) {
+void ListDouble<T>::erase(const Iterator& pos) {
     if (pos == end() || empty()) {
         throw runtime_error("Invalid iterator!");
     }

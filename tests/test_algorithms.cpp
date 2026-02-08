@@ -70,6 +70,18 @@ TEST(IslandCounterTest, ComplexShapedIsland) {
 	EXPECT_EQ(countIslands(grid), 1);
 }
 
+TEST(IslandCounterTest, EmptyGrids) {
+
+	vector<vector<int>> grid = {
+		{0, 0, 0},
+		{0, 0, 0},
+		{0, 0, 0}
+	};
+
+	EXPECT_EQ(countIslands(grid), 0);
+}
+
+
 // Тесты для методов нахождения цикла в списке
 // 1 - метод Флойда
 

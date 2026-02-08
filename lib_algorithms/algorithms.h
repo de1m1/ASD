@@ -58,17 +58,18 @@ int countIslands(const vector<vector<int>>& grid) {
 
                 if (j + 1 < cols && grid[i][j + 1] == 1) {
                     int rightIdx = toIndex(i, j + 1, cols);
-                    dsu.united(currentIdx, rightIdx);
+                    dsu.unite(currentIdx, rightIdx);
                 }
 
                 if (i + 1 < rows && grid[i + 1][j] == 1) {
                     int downIdx = toIndex(i + 1, j, cols);
-                    dsu.united(currentIdx, downIdx);
+                    dsu.unite(currentIdx, downIdx);
                 }
             }
         }
     }
-    unordered_set<int> uniqueRoots;
+    
+    int cointisland = 0;
 
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
@@ -79,11 +80,11 @@ int countIslands(const vector<vector<int>>& grid) {
 
                 int root = dsu.find(idx);
 
-                uniqueRoots.insert(root);
+                if (root == idx) { cointisland++; }
             }
         }
     }
-    return uniqueRoots.size();
+    return cointisland;
 }
 
 // Методы нахождения цикла в списке

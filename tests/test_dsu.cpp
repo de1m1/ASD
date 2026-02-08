@@ -14,8 +14,8 @@ TEST(DSUTest, InitialState) {
 TEST(DSUTest, BasicUnionFind) {
 	DSU dsu(5);
 
-	dsu.united(0, 1);
-	dsu.united(2, 3);
+	dsu.unite(0, 1);
+	dsu.unite(2, 3);
 
 	EXPECT_EQ(dsu.find(0), dsu.find(1)); 
 	EXPECT_EQ(dsu.find(2), dsu.find(3));  
@@ -26,8 +26,8 @@ TEST(DSUTest, BasicUnionFind) {
 TEST(DSUTest, Transitivnost) {
 	DSU dsu(5);
 
-	dsu.united(0, 1);
-	dsu.united(1, 2);
+	dsu.unite(0, 1);
+	dsu.unite(1, 2);
 
 	EXPECT_EQ(dsu.find(0), dsu.find(1));
 	EXPECT_EQ(dsu.find(1), dsu.find(2));
@@ -37,9 +37,9 @@ TEST(DSUTest, Transitivnost) {
 TEST(DSUTest, RepeatedUnion) {
 	DSU dsu(5);
 
-	dsu.united(0, 1);
-	dsu.united(0, 1);
-	dsu.united(1, 0);
+	dsu.unite(0, 1);
+	dsu.unite(0, 1);
+	dsu.unite(1, 0);
 
 	EXPECT_EQ(dsu.find(0), dsu.find(1));
 }
@@ -47,8 +47,8 @@ TEST(DSUTest, RepeatedUnion) {
 TEST(DSUTest, PathCompressionParentNew) {
 	DSU dsu(5);
 
-	dsu.united(0, 1);
-	dsu.united(1, 2);
+	dsu.unite(0, 1);
+	dsu.unite(1, 2);
 
 	int root = dsu.find(2);
 
@@ -59,14 +59,14 @@ TEST(DSUTest, PathCompressionParentNew) {
 TEST(DSUTest, UnionALot) {
 	DSU dsu(10);
 
-	dsu.united(0, 1);
-	dsu.united(2, 3);
-	dsu.united(1, 2);
+	dsu.unite(0, 1);
+	dsu.unite(2, 3);
+	dsu.unite(1, 2);
 
-	dsu.united(4, 5);
-	dsu.united(5, 6);
+	dsu.unite(4, 5);
+	dsu.unite(5, 6);
 
-	dsu.united(0, 4);
+	dsu.unite(0, 4);
 
 	for (int i = 0; i <= 6; i++) {
 		EXPECT_EQ(dsu.find(i), dsu.find(0));

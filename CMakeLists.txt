@@ -22,6 +22,9 @@ add_subdirectory(lib_list2)
 add_subdirectory(lib_tvector)
 add_subdirectory(lib_dsu)
 add_subdirectory(lib_stack_queue_from_list)
+add_subdirectory(lib_monom)
+add_subdirectory(lib_polinom)
+add_subdirectory(lib_lab3)
 
 add_subdirectory(main)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
 

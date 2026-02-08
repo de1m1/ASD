@@ -110,17 +110,12 @@ TEST(ListTest, Iterator) {
     list.push_back(2);
     list.push_back(3);
 
-    auto it = list.begin();
-    EXPECT_EQ(*it, 1);
+    int i = 1;
 
-    ++it;
-    EXPECT_EQ(*it, 2);
-
-    ++it;
-    EXPECT_EQ(*it, 3);
-
-    ++it;
-    EXPECT_EQ(it, list.end());
+    for (auto it = list.begin(); it != list.end(); it++) {
+        EXPECT_EQ(*it, i);
+        i++;
+    }
 }
 
 TEST(ListTest, IteratorPostIncrement) {
@@ -232,3 +227,19 @@ TEST(ListTest, EraseInMiddle) {
     EXPECT_EQ(list.front(), 1);
     EXPECT_EQ(list.back(), 3);
 }
+
+//TEST(ListTest, FindonList) {
+//    List<int> list;
+//    list.push_back(1);
+//    list.push_back(2);
+//    list.push_back(3);
+//    
+//    const int a = 2;
+//
+//    auto it = list.find(a);
+//
+//    EXPECT_EQ(it, 2);
+//
+//}
+
+

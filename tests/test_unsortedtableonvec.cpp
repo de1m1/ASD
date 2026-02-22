@@ -10,7 +10,7 @@ TEST(UnsortedTableOnVec, insert_adds_element) {
     UnsortedTableOnVec<int, int> table;
     table.insert(1, 100);
     EXPECT_FALSE(table.is_empty());
-    EXPECT_TRUE(table.consirt(1));
+    EXPECT_TRUE(table.contains(1));
 }
 
 TEST(UnsortedTableOnVec, find_returns_value) {
@@ -31,14 +31,14 @@ TEST(UnsortedTableOnVec, erase_removes_element) {
     UnsortedTableOnVec<int, char> table;
     table.insert(1, 'a');
     table.erase(1);
-    EXPECT_FALSE(table.consirt(1));
+    EXPECT_FALSE(table.contains(1));
 }
 
 TEST(UnsortedTableOnVec, erase_does_nothing_if_not_found) {
     UnsortedTableOnVec<int, int> table;
     table.insert(1, 10);
     table.erase(5);
-    EXPECT_TRUE(table.consirt(1));
+    EXPECT_TRUE(table.contains(1));
 }
 
 TEST(UnsortedTableOnVec, replace_updates_value) {
@@ -66,16 +66,16 @@ TEST(UnsortedTableOnVec, is_empty_false_after_insert) {
     EXPECT_FALSE(table.is_empty());
 }
 
-TEST(UnsortedTableOnVec, consirt_true_if_key_exists) {
+TEST(UnsortedTableOnVec, contains_true_if_key_exists) {
     UnsortedTableOnVec<int, int> table;
     table.insert(42, 100);
-    EXPECT_TRUE(table.consirt(42));
+    EXPECT_TRUE(table.contains(42));
 }
 
-TEST(UnsortedTableOnVec, consirt_false_if_key_not_exists) {
+TEST(UnsortedTableOnVec, contains_false_if_key_not_exists) {
     UnsortedTableOnVec<int, int> table;
     table.insert(42, 100);
-    EXPECT_FALSE(table.consirt(99));
+    EXPECT_FALSE(table.contains(99));
 }
 
 TEST(UnsortedTableOnVec, can_store_duplicate_keys) {

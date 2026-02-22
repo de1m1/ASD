@@ -12,11 +12,11 @@ public:
 	UnsortedTableOnVec() {}
 
 	void insert(const TKey& Key, const TVal& Val) override;
-	TVal find(TKey& Key) override;
+	TVal find( const TKey& Key) override;
 	void erase(const TKey& Key) override;
 	ostream& print(ostream& out) const noexcept override;
 	bool is_empty() const noexcept override;
-	bool consirt(const TKey& Key) const noexcept override;
+	bool contains(const TKey& Key) const noexcept override;
 	void replace(const TKey& Key, const TVal& Val) override;
 
 };
@@ -27,7 +27,7 @@ void UnsortedTableOnVec<TKey, TVal>::insert(const TKey& Key, const TVal& Val) {
 }
 
 template<typename TKey, typename TVal>
-TVal UnsortedTableOnVec<TKey, TVal>::find(TKey& Key) {
+TVal UnsortedTableOnVec<TKey, TVal>::find(const TKey& Key) {
     for (size_t i = 0; i < _rows.size(); ++i) {
         if (_rows[i].first == Key) {
             return _rows[i].second;
@@ -63,7 +63,7 @@ bool UnsortedTableOnVec<TKey, TVal>::is_empty() const noexcept {
 }
 
 template<typename TKey, typename TVal>
-bool UnsortedTableOnVec<TKey, TVal>::consirt(const TKey& Key) const noexcept {
+bool UnsortedTableOnVec<TKey, TVal>::contains(const TKey& Key) const noexcept {
     for (size_t i = 0; i < _rows.size(); ++i) {
         if (_rows[i].first == Key) {
             return true;

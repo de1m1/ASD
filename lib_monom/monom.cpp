@@ -2,8 +2,6 @@
 #include <cmath>
 #include <stdexcept>
 
-
-
 Monom::Monom() : coef(0), px(0), py(0), pz(0) {}
 
 Monom::Monom(double c, int x, int y, int z): coef(c), px(x), py(y), pz(z){

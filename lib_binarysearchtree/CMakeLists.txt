@@ -1,0 +1,2 @@
+create_project_lib(binarysearchtree)
+target_include_directories(binarysearchtree PUBLIC ../lib_queue)

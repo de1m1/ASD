@@ -1,0 +1,3 @@
+create_project_lib(sortedtableonsearchtree)
+target_include_directories(sortedtableonsearchtree PUBLIC ../lib_binarysearchtree)
+target_include_directories(sortedtableonsearchtree PUBLIC ../lib_itable)

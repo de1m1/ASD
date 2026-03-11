@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 #include "queue.h"
+#include <sstream>
+
 
 template<typename TKey, typename TVal>
 class BSTree {
@@ -20,20 +22,40 @@ private:
     void print_D2_rec(Node* cur);
     void print_D3_rec(Node* cur);
     void clear_tree(Node* cur);
+    void to_string_rec(Node* cur, std::stringstream& ss) const{
+        if (!cur) return;
+        ss << cur->val.first << ": " << cur->val.second << "\n";
+        to_string_rec(cur->left, ss);
+        to_string_rec(cur->right, ss);
+	}
 
     template<typename Func>
     void bfs(Func f);
 
+    Node* find_pos(const TKey& key) const noexcept {
 
+        Node* cur = _root;
+
+        while (cur && cur->val.first != key) {
+
+            if (key < cur->val.first)
+                cur = cur->left;
+            else
+                cur = cur->right;
+        }
+
+        return cur;
+    }
 public:
 
     BSTree() : _root(nullptr) {}
-    ~BSTree() { clear_tree(_root); _root = nullptr; }
+    ~BSTree() { clear_tree(_root); }
 
     void insert(const TKey& key, const TVal& val);
+    TVal& find(const TKey& key);
     void erase(const TKey& key);
-    bool find(const TKey& key, TVal& val) const;
-    bool empty() const { return _root == nullptr; }
+    bool empty() const noexcept { return _root == nullptr; }
+	std::string to_string() const noexcept;
 
     void print_D1() { print_D1_rec(_root); }
     void print_D2() { print_D2_rec(_root); }
@@ -107,7 +129,7 @@ void BSTree<TKey, TVal>::insert(const TKey& key, const TVal& val) {
 
     Node* node = new Node({ key, val });
 
-    if (!_root) {
+    if (empty()) {
         _root = node;
         return;
     }
@@ -143,13 +165,32 @@ void BSTree<TKey, TVal>::insert(const TKey& key, const TVal& val) {
 }
 
 template<typename TKey, typename TVal>
+TVal& BSTree<TKey, TVal>::find(const TKey& key) {
+
+    Node* cur = _root;
+
+    while (cur && cur->val.first != key) {
+
+        if (key < cur->val.first)
+            cur = cur->left;
+        else
+            cur = cur->right;
+    }
+
+    if (!cur)
+        throw std::runtime_error("Key not found");
+
+    return cur->val.second;
+}
+
+template<typename TKey, typename TVal>
 void BSTree<TKey, TVal>::erase(const TKey& key) {
 
     Node* parent = nullptr;
     Node* cur = _root;
 
-    // ищем узел
     while (cur && cur->val.first != key) {
+
         parent = cur;
 
         if (key < cur->val.first)
@@ -158,9 +199,10 @@ void BSTree<TKey, TVal>::erase(const TKey& key) {
             cur = cur->right;
     }
 
-    if (!cur) return; // ключ не найден
+    if (!cur)
+        return;
 
-    // если два потомка
+    // два ребёнка
     if (cur->left && cur->right) {
 
         Node* pred_parent = cur;
@@ -173,30 +215,34 @@ void BSTree<TKey, TVal>::erase(const TKey& key) {
 
         cur->val = pred->val;
 
-        parent = pred_parent;
-        cur = pred;
+        if (pred_parent == cur)
+            pred_parent->left = pred->left;
+        else
+            pred_parent->right = pred->left;
+
+        delete pred;
+        return;
     }
 
-    // теперь у cur максимум один ребёнок
-    Node* child = nullptr;
+    Node* child = cur->left ? cur->left : cur->right;
 
-    if (cur->left)
-        child = cur->left;
-    else
-        child = cur->right;
-
-    // удаляем корень
-    if (!parent) {
+    if (!parent)
         _root = child;
-    }
-    else if (parent->left == cur) {
+    else if (parent->left == cur)
         parent->left = child;
-    }
-    else {
+    else
         parent->right = child;
-    }
 
     delete cur;
+}
+template<typename TKey, typename TVal>
+std::string BSTree<TKey, TVal>::to_string() const noexcept {
+
+    std::stringstream ss;
+
+    to_string_rec(_root, ss);
+
+    return ss.str();
 }
 
 template<typename TKey, typename TVal>
@@ -207,23 +253,6 @@ void BSTree<TKey, TVal>::print_W() {
         });
 }
 
-template<typename TKey, typename TVal>
-bool BSTree<TKey, TVal>::find(const TKey& key, TVal& val) const {
 
-    Node* cur = _root;
 
-    while (cur) {
 
-        if (key == cur->val.first) {
-            val = cur->val.second;
-            return true;
-        }
-
-        if (key < cur->val.first)
-            cur = cur->left;
-        else
-            cur = cur->right;
-    }
-
-    return false;
-}

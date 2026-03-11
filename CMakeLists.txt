@@ -27,6 +27,8 @@ add_subdirectory(lib_polinom)
 add_subdirectory(lib_itable)
 add_subdirectory(lib_unsortedtableonvec)
 add_subdirectory(lib_sortedtableonvec)
+add_subdirectory(lib_binarytree)
+add_subdirectory(lib_unsortedtableontree)
 
 add_subdirectory(main)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
 

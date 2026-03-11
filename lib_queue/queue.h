@@ -10,6 +10,7 @@ class Queue {
 
 public:
     // Конструкторы
+	Queue() : _data(nullptr), _head(0), _count(0), _capacity(0) {}
     Queue(int size);
     Queue(const Queue& other);
 

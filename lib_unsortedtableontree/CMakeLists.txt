@@ -1,0 +1,3 @@
+create_project_lib(unsortedtableontree)
+target_include_directories(unsortedtableontree PUBLIC ../lib_binarytree)
+target_include_directories(unsortedtableontree PUBLIC ../lib_itable)

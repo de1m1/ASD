@@ -16,13 +16,13 @@ private:
 
     Node* _root;
 
-    void print_D1_rec(Node* cur);
-    void print_D2_rec(Node* cur);
-    void print_D3_rec(Node* cur);
+    void print_D1_rec(Node* cur); //CLR
+    void print_D2_rec(Node* cur); // LNR
+    void print_D3_rec(Node* cur); // LRN
     void clear_tree(Node* cur);
 
     template<typename Func>
-    void bfs(Func f);
+    void bfs(Func f) const;
 
 
 public:
@@ -39,12 +39,14 @@ public:
     void print_D2() { print_D2_rec(_root);}
     void print_D3() { print_D3_rec(_root);}
     void print_W();
+
+    TVal* find_ptr(const TKey& key) const;
 };
 
 
 template<typename TKey, typename TVal>
 template<typename Func>
-void Tree<TKey, TVal>::bfs(Func f) {
+void Tree<TKey, TVal>::bfs(Func f) const{
 
     if (!_root) return;
 
@@ -194,6 +196,18 @@ void Tree<TKey, TVal>::print_W() {
     bfs([](Node* cur) {
         std::cout << cur->val.first << " ";
         });
+}
+
+template<typename TKey, typename TVal>
+inline TVal* Tree<TKey, TVal>::find_ptr(const TKey& key) const{
+    TVal* result = nullptr;
+
+    bfs([&](Node* cur) {
+        if (cur->val.first == key)
+            result = &cur->val.second;
+        });
+
+    return result;
 }
 
 template<typename TKey, typename TVal>

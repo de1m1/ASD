@@ -16,7 +16,7 @@ public:
     SortedTableOnSearchTree() {}
 
     void insert(const TKey& Key, const TVal& Val) override;
-    TVal find(const TKey& Key) override;
+    TVal& find(const TKey& Key) override;
     void erase(const TKey& Key) override;
     std::ostream& print(std::ostream& out) const noexcept override;
     bool is_empty() const noexcept override;
@@ -30,7 +30,7 @@ void SortedTableOnSearchTree<TKey, TVal>::insert(const TKey& Key, const TVal& Va
 }
 
 template<typename TKey, typename TVal>
-TVal SortedTableOnSearchTree<TKey, TVal>::find(const TKey& Key) {
+TVal& SortedTableOnSearchTree<TKey, TVal>::find(const TKey& Key) {
     return _tree.find(Key);
 }
 
@@ -41,14 +41,7 @@ void SortedTableOnSearchTree<TKey, TVal>::erase(const TKey& Key) {
 
 template<typename TKey, typename TVal>
 bool SortedTableOnSearchTree<TKey, TVal>::contains(const TKey& Key) const noexcept {
-
-    try {
-        const_cast<BSTree<TKey, TVal>&>(_tree).find(Key);
-        return true;
-    }
-    catch (...) {
-        return false;
-    }
+    return _tree.contains(Key);
 }
 
 template<typename TKey, typename TVal>

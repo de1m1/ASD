@@ -89,7 +89,7 @@ TEST(Monom, lexic) {
     Monom m1(1, 3, 0, 0);
     Monom m2(1, 2, 5, 0);
 
-    EXPECT_TRUE(m1 < m2);
+	EXPECT_TRUE(m1 < m2); // Сортировка идёт по убыванию степеней, поэтому m1 < m2, так как 3 > 2
 }
 
 TEST(Monom, input_output) {
@@ -100,4 +100,18 @@ TEST(Monom, input_output) {
     ss >> m;
 
     EXPECT_DOUBLE_EQ(m.Calculate(1, 1, 1), 5);
+}
+
+TEST(Monom, add_different_throws) {
+    Monom m1(2, 1, 0, 0);
+    Monom m2(3, 2, 0, 0);
+
+    EXPECT_THROW(m1 + m2, std::logic_error);
+}
+
+TEST(Monom, sub_different_throws) {
+    Monom m1(2, 1, 0, 0);
+    Monom m2(3, 2, 0, 0);
+
+    EXPECT_THROW(m1 - m2, std::logic_error);
 }

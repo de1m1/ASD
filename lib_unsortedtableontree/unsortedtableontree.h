@@ -12,7 +12,7 @@ public:
     UnsortedTableOnTree() {}
 
     void insert(const TKey& Key, const TVal& Val) override;
-    TVal find(const TKey& Key) override;
+    TVal& find(const TKey& Key) override;
     void erase(const TKey& Key) override;
     ostream& print(ostream& out) const noexcept override;
     bool is_empty() const noexcept override;
@@ -27,14 +27,13 @@ void UnsortedTableOnTree<TKey, TVal>::insert(const TKey& Key, const TVal& Val) {
 }
 
 template<typename TKey, typename TVal>
-TVal UnsortedTableOnTree<TKey, TVal>::find(const TKey& Key) {
+TVal& UnsortedTableOnTree<TKey, TVal>::find(const TKey& Key) {
+    TVal* ptr = _tree.find_ptr(Key);
 
-    TVal val;
-
-    if (!_tree.find(Key, val))
+    if (!ptr)
         throw std::runtime_error("Key not found");
 
-    return val;
+    return *ptr;
 }
 
 template<typename TKey, typename TVal>
@@ -49,16 +48,13 @@ void UnsortedTableOnTree<TKey, TVal>::erase(const TKey& Key) {
 template<typename TKey, typename TVal>
 bool UnsortedTableOnTree<TKey, TVal>::contains(const TKey& Key) const noexcept {
 
-    TVal val;
-
-    return const_cast<Tree<TKey, TVal>&>(_tree).find(Key, val);
+    return _tree.find_ptr(Key) != nullptr;
 }
 
 template<typename TKey, typename TVal>
 void UnsortedTableOnTree<TKey, TVal>::replace(const TKey& Key, const TVal& Val) {
 
-    erase(Key);
-    insert(Key, Val);
+    find(Key) = Val;
 }
 
 template<typename TKey, typename TVal>

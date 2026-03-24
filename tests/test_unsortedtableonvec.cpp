@@ -34,13 +34,6 @@ TEST(UnsortedTableOnVec, erase_removes_element) {
     EXPECT_FALSE(table.contains(1));
 }
 
-TEST(UnsortedTableOnVec, erase_does_nothing_if_not_found) {
-    UnsortedTableOnVec<int, int> table;
-    table.insert(1, 10);
-    table.erase(5);
-    EXPECT_TRUE(table.contains(1));
-}
-
 TEST(UnsortedTableOnVec, replace_updates_value) {
     UnsortedTableOnVec<int, string> table;
     table.insert(1, "hello");

@@ -22,11 +22,10 @@ bool Polynom::operator==(const Polynom& other) const {
     if (monoms.size() != other.monoms.size())
         return false;
 
-    for (size_t i = 0; i < monoms.size(); ++i) {
-        if (!(monoms[i] == other.monoms[i]) ||
-            monoms[i].Calculate(1,1,1) != other.monoms[i].Calculate(1,1,1))
+    for (size_t i = 0; i < monoms.size(); ++i)
+        if (!(monoms[i] == other.monoms[i]))
             return false;
-    }
+
     return true;
 }
 
@@ -39,26 +38,20 @@ void Polynom::normalize() {
     if (monoms.size() == 0)
         return;
 
-    // сортировка
     for (size_t i = 0; i < monoms.size(); ++i)
         for (size_t j = i + 1; j < monoms.size(); ++j)
             if (monoms[j] < monoms[i]) {
-                Monom tmp = monoms[i];
+                Monom temp = monoms[i];
                 monoms[i] = monoms[j];
-                monoms[j] = tmp;
+                monoms[j] = temp;
             }
 
-    // объединение одинаковых степеней
     for (size_t i = 0; i + 1 < monoms.size();) {
 
-        if (!(monoms[i] < monoms[i + 1]) &&
-            !(monoms[i + 1] < monoms[i])) {
-
+        if (!(monoms[i] < monoms[i + 1]) && !(monoms[i + 1] < monoms[i])) {
             monoms[i] += monoms[i + 1];
-
             for (size_t j = i + 1; j + 1 < monoms.size(); ++j)
                 monoms[j] = monoms[j + 1];
-
             monoms.pop_back();
         }
         else {
@@ -66,7 +59,6 @@ void Polynom::normalize() {
         }
     }
 
-    // удаление нулевых
     for (size_t i = 0; i < monoms.size();) {
         if (monoms[i] == Monom()) {
             for (size_t j = i; j + 1 < monoms.size(); ++j)
@@ -115,17 +107,30 @@ Polynom Polynom::operator*(const Polynom& other) const {
 }
 
 Polynom& Polynom::operator+=(const Polynom& other) {
-    *this = *this + other;
+    for (size_t i = 0; i < other.monoms.size(); ++i)
+        monoms.push_back(other.monoms[i]);
+
+    normalize();
     return *this;
 }
 
 Polynom& Polynom::operator-=(const Polynom& other) {
-    *this = *this - other;
+    for (size_t i = 0; i < other.monoms.size(); ++i)
+        monoms.push_back(-other.monoms[i]);
+
+    normalize();
     return *this;
 }
 
 Polynom& Polynom::operator*=(const Polynom& other) {
-    *this = *this * other;
+    Polynom tmp;
+
+    for (size_t i = 0; i < monoms.size(); ++i)
+        for (size_t j = 0; j < other.monoms.size(); ++j)
+            tmp.monoms.push_back(monoms[i] * other.monoms[j]);
+
+    tmp.normalize();
+    monoms = tmp.monoms;
     return *this;
 }
 
@@ -143,10 +148,16 @@ std::ostream& operator<<(std::ostream& os, const Polynom& p) {
         return os;
     }
 
-    for (size_t i = 0; i < p.monoms.size(); ++i) {
-        if (i > 0)
-            os << " + ";
-        os << p.monoms[i];
+    os << p.monoms[0];
+
+    for (size_t i = 1; i < p.monoms.size(); ++i) {
+
+        double val = p.monoms[i].Calculate(1, 1, 1);
+
+        if (val < 0)
+            os << " - " << (-p.monoms[i]);
+        else
+            os << " + " << p.monoms[i];
     }
 
     return os;

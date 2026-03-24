@@ -75,32 +75,51 @@ Monom Monom::operator-() const {
 }
 
 Monom& Monom::operator+=(const Monom& other) {
-    *this = *this + other;
+    if (!(px == other.px && py == other.py && pz == other.pz))
+        throw std::logic_error("Different monoms!");
+
+    coef += other.coef;
     return *this;
 }
 
 Monom& Monom::operator-=(const Monom& other) {
-    *this = *this - other;
+    if (!(px == other.px && py == other.py && pz == other.pz))
+        throw std::logic_error("Different monoms!");
+
+    coef -= other.coef;
     return *this;
 }
 
 Monom& Monom::operator*=(const Monom& other) {
-    *this = *this * other;
+    coef *= other.coef;
+    px += other.px;
+    py += other.py;
+    pz += other.pz;
     return *this;
 }
 
 Monom& Monom::operator/=(const Monom& other) {
-    *this = *this / other;
+    if (other.coef == 0)
+        throw std::logic_error("Division by zero!");
+
+    coef /= other.coef;
+    px -= other.px;
+    py -= other.py;
+    pz -= other.pz;
     return *this;
 }
 
+
 Monom& Monom::operator*=(double k) {
-    *this = *this * k;
+    coef *= k;
     return *this;
 }
 
 Monom& Monom::operator/=(double k) {
-    *this = *this / k;
+    if (k == 0)
+        throw std::logic_error("Division by zero!");
+
+    coef /= k;
     return *this;
 }
 

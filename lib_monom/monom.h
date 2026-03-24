@@ -5,6 +5,7 @@
 
 class Monom {
 private:
+
     double coef;
     int px;
     int py;

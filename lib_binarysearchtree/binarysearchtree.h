@@ -3,7 +3,6 @@
 #include "queue.h"
 #include <sstream>
 
-
 template<typename TKey, typename TVal>
 class BSTree {
 private:
@@ -18,9 +17,9 @@ private:
 
     Node* _root;
 
-    void print_D1_rec(Node* cur);
-    void print_D2_rec(Node* cur);
-    void print_D3_rec(Node* cur);
+	void print_D1_rec(Node* cur); // CLR
+	void print_D2_rec(Node* cur); // LNR
+	void print_D3_rec(Node* cur); // LRN
     void clear_tree(Node* cur);
     void to_string_rec(Node* cur, std::stringstream& ss) const{
         if (!cur) return;
@@ -56,6 +55,7 @@ public:
     void erase(const TKey& key);
     bool empty() const noexcept { return _root == nullptr; }
 	std::string to_string() const noexcept;
+	bool contains(const TKey& key) const noexcept { return find_pos(key) != nullptr; }
 
     void print_D1() { print_D1_rec(_root); }
     void print_D2() { print_D2_rec(_root); }
@@ -126,7 +126,7 @@ inline void BSTree<TKey, TVal>::clear_tree(Node* cur) {
 
 template<typename TKey, typename TVal>
 void BSTree<TKey, TVal>::insert(const TKey& key, const TVal& val) {
-
+    
     Node* node = new Node({ key, val });
 
     if (empty()) {
@@ -135,7 +135,7 @@ void BSTree<TKey, TVal>::insert(const TKey& key, const TVal& val) {
     }
 
     Node* cur = _root;
-
+	// Ищем позицию для вставки
     while (true) {
 
         if (key < cur->val.first) {
@@ -144,7 +144,6 @@ void BSTree<TKey, TVal>::insert(const TKey& key, const TVal& val) {
                 cur->left = node;
                 return;
             }
-
             cur = cur->left;
         }
         else if (key > cur->val.first) {
@@ -156,6 +155,8 @@ void BSTree<TKey, TVal>::insert(const TKey& key, const TVal& val) {
 
             cur = cur->right;
         }
+
+		// Ключ уже существует
         else {
             cur->val.second = val;
             delete node;
@@ -186,6 +187,7 @@ TVal& BSTree<TKey, TVal>::find(const TKey& key) {
 template<typename TKey, typename TVal>
 void BSTree<TKey, TVal>::erase(const TKey& key) {
 
+	// поиск узла для удаления и его родителя
     Node* parent = nullptr;
     Node* cur = _root;
 
@@ -202,7 +204,7 @@ void BSTree<TKey, TVal>::erase(const TKey& key) {
     if (!cur)
         return;
 
-    // два ребёнка
+    // 2 ребёнка
     if (cur->left && cur->right) {
 
         Node* pred_parent = cur;
@@ -224,7 +226,13 @@ void BSTree<TKey, TVal>::erase(const TKey& key) {
         return;
     }
 
-    Node* child = cur->left ? cur->left : cur->right;
+	// 1 ребёнок или 0
+    Node* child = nullptr;
+
+    if (cur->left != nullptr)
+        child = cur->left;
+    else
+        child = cur->right;
 
     if (!parent)
         _root = child;

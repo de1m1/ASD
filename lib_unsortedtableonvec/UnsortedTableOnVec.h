@@ -6,13 +6,16 @@
 template<typename TKey, typename TVal>
 class UnsortedTableOnVec: public ITable<TKey, TVal>{
 private:
+
 	TVector<std::pair<TKey, TVal>>_rows;
+
 public:
+
 	~UnsortedTableOnVec() {}
 	UnsortedTableOnVec() {}
 
 	void insert(const TKey& Key, const TVal& Val) override;
-	TVal find( const TKey& Key) override;
+	TVal& find( const TKey& Key) override;
 	void erase(const TKey& Key) override;
 	ostream& print(ostream& out) const noexcept override;
 	bool is_empty() const noexcept override;
@@ -23,11 +26,15 @@ public:
 
 template<typename TKey, typename TVal>
 void UnsortedTableOnVec<TKey, TVal>::insert(const TKey& Key, const TVal& Val) {
+    if (contains(Key)) {
+        throw runtime_error("Key already exists");
+    }
+
 	_rows.push_back(make_pair(Key, Val));
 }
 
 template<typename TKey, typename TVal>
-TVal UnsortedTableOnVec<TKey, TVal>::find(const TKey& Key) {
+TVal& UnsortedTableOnVec<TKey, TVal>::find(const TKey& Key) {
     for (size_t i = 0; i < _rows.size(); ++i) {
         if (_rows[i].first == Key) {
             return _rows[i].second;
@@ -47,6 +54,7 @@ void UnsortedTableOnVec<TKey, TVal>::erase(const TKey& Key) {
             return;
         }
     }
+    throw runtime_error("Key not found");
 }
 
 template<typename TKey, typename TVal>

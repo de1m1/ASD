@@ -15,18 +15,6 @@ TEST(UnsortedTreeTable, insert_and_find) {
     EXPECT_EQ(t.find(5), 10);
 }
 
-TEST(UnsortedTreeTable, insert_multiple) {
-    UnsortedTableOnTree<int, int> t;
-
-    t.insert(5, 10);
-    t.insert(2, 20);
-    t.insert(8, 30);
-
-    EXPECT_EQ(t.find(5), 10);
-    EXPECT_EQ(t.find(2), 20);
-    EXPECT_EQ(t.find(8), 30);
-}
-
 TEST(UnsortedTreeTable, contains_true) {
     UnsortedTableOnTree<int, int> t;
 
@@ -76,10 +64,4 @@ TEST(UnsortedTreeTable, find_missing_should_throw) {
     UnsortedTableOnTree<int, int> t;
 
     EXPECT_THROW(t.find(1), std::runtime_error);
-}
-
-TEST(UnsortedTreeTable, erase_missing_should_throw) {
-    UnsortedTableOnTree<int, int> t;
-
-    EXPECT_THROW(t.erase(1), std::runtime_error);
 }

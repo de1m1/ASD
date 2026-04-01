@@ -31,6 +31,7 @@ add_subdirectory(lib_binarytree)
 add_subdirectory(lib_unsortedtableontree)
 add_subdirectory(lib_binarysearchtree)
 add_subdirectory(lib_sortedtableonsearchtree)
+add_subdirectory(lib_unsortedtableonlist)
 
 add_subdirectory(main)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
 

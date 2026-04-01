@@ -15,13 +15,14 @@ public:
     ~SortedTableOnSearchTree() {}
     SortedTableOnSearchTree() {}
 
-    void insert(const TKey& Key, const TVal& Val) override;
+    void insert(const TKey& Key, const TVal& Val);
     TVal& find(const TKey& Key) override;
     void erase(const TKey& Key) override;
-    std::ostream& print(std::ostream& out) const noexcept override;
-    bool is_empty() const noexcept override;
-    bool contains(const TKey& Key) const noexcept override;
-    void replace(const TKey& Key, const TVal& Val) override;
+    std::ostream& print(std::ostream& out) const noexcept;
+    bool is_empty() const noexcept;
+    bool contains(const TKey& Key) const noexcept;
+    void replace(const TKey& Key, const TVal& Val);
+
 };
 
 template<typename TKey, typename TVal>

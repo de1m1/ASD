@@ -28,10 +28,10 @@ bool Monom::operator!=(const Monom& other) const {
     return !(*this == other);
 }
 
-bool Monom::operator<(const Monom& other) const {
-    if (px != other.px) return px > other.px;
-    if (py != other.py) return py > other.py;
-    return pz > other.pz;
+bool Monom::operator<(const Monom& other) const { 
+    if (px != other.px) return px < other.px;
+    if (py != other.py) return py < other.py;
+    return pz < other.pz; // сортировка по убыванию степеней
 }
 
 Monom Monom::operator+(const Monom& other) const {

@@ -1,8 +1,7 @@
 #include <gtest/gtest.h>
 #include "sortedtableonsearchtree.h"
 
-TEST(SortedTableOnSearchTree, InsertAndFind)
-{
+TEST(SortedTableOnSearchTree, InsertAndFind){
     SortedTableOnSearchTree<int, std::string> table;
 
     table.insert(1, "one");
@@ -14,8 +13,7 @@ TEST(SortedTableOnSearchTree, InsertAndFind)
     EXPECT_EQ(table.find(3), "three");
 }
 
-TEST(SortedTableOnSearchTree, Contains)
-{
+TEST(SortedTableOnSearchTree, Contains){
     SortedTableOnSearchTree<int, int> table;
 
     table.insert(10, 100);
@@ -26,8 +24,7 @@ TEST(SortedTableOnSearchTree, Contains)
     EXPECT_FALSE(table.contains(30));
 }
 
-TEST(SortedTableOnSearchTree, Erase)
-{
+TEST(SortedTableOnSearchTree, Erase){
     SortedTableOnSearchTree<int, int> table;
 
     table.insert(5, 50);
@@ -41,8 +38,7 @@ TEST(SortedTableOnSearchTree, Erase)
     EXPECT_TRUE(table.contains(7));
 }
 
-TEST(SortedTableOnSearchTree, Replace)
-{
+TEST(SortedTableOnSearchTree, Replace){
     SortedTableOnSearchTree<int, std::string> table;
 
     table.insert(1, "one");
@@ -52,8 +48,7 @@ TEST(SortedTableOnSearchTree, Replace)
     EXPECT_EQ(table.find(1), "ONE");
 }
 
-TEST(SortedTableOnSearchTree, IsEmpty)
-{
+TEST(SortedTableOnSearchTree, IsEmpty){
     SortedTableOnSearchTree<int, int> table;
 
     EXPECT_TRUE(table.is_empty());
@@ -65,4 +60,21 @@ TEST(SortedTableOnSearchTree, IsEmpty)
     table.erase(1);
 
     EXPECT_TRUE(table.is_empty());
+}
+
+TEST(SortedTableOnSearchTree, FindThrows){
+    SortedTableOnSearchTree<int, int> table;
+
+    table.insert(1, 10);
+
+    EXPECT_THROW(table.find(100), std::runtime_error);
+}
+
+TEST(SortedTableOnSearchTree, InsertReplaceValue){
+    SortedTableOnSearchTree<int, std::string> table;
+
+    table.insert(1, "one");
+    table.insert(1, "ONE");
+
+    EXPECT_EQ(table.find(1), "ONE");
 }

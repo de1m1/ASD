@@ -1,10 +1,12 @@
 #pragma once
+#include <iostream>
 #include "monom.h"
-#include "tvector.h"
+#include "list.h"
 
 class Polynom {
+
 private:
-    TVector<Monom> monoms;
+    List<Monom> monoms;
 
     void normalize();
 
@@ -12,6 +14,8 @@ public:
     Polynom();
     Polynom(const Monom& m);
     Polynom(const Polynom& other);
+    Polynom(const char* str) : Polynom(std::string(str)) {}
+    Polynom(const std::string& str);
 
     Polynom& operator=(const Polynom& other);
 

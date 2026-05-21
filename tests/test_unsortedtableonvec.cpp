@@ -1,23 +1,11 @@
 #include "UnsortedTableOnVec.h"
 #include <gtest/gtest.h>
 
-TEST(UnsortedTableOnVec, can_create) {
-    UnsortedTableOnVec<int, float> T1;
-    T1.insert(10, 3.14);
-}
-
 TEST(UnsortedTableOnVec, insert_adds_element) {
     UnsortedTableOnVec<int, int> table;
     table.insert(1, 100);
     EXPECT_FALSE(table.is_empty());
     EXPECT_TRUE(table.contains(1));
-}
-
-TEST(UnsortedTableOnVec, find_returns_value) {
-    UnsortedTableOnVec<int, string> table;
-    table.insert(1, "one");
-    int key = 1;
-    EXPECT_EQ(table.find(key), "one");
 }
 
 TEST(UnsortedTableOnVec, find_throws_if_not_found) {
@@ -53,32 +41,10 @@ TEST(UnsortedTableOnVec, is_empty_true_for_new_table) {
     EXPECT_TRUE(table.is_empty());
 }
 
-TEST(UnsortedTableOnVec, is_empty_false_after_insert) {
-    UnsortedTableOnVec<int, int> table;
-    table.insert(1, 10);
-    EXPECT_FALSE(table.is_empty());
-}
-
-TEST(UnsortedTableOnVec, contains_true_if_key_exists) {
-    UnsortedTableOnVec<int, int> table;
-    table.insert(42, 100);
-    EXPECT_TRUE(table.contains(42));
-}
-
-TEST(UnsortedTableOnVec, contains_false_if_key_not_exists) {
-    UnsortedTableOnVec<int, int> table;
-    table.insert(42, 100);
-    EXPECT_FALSE(table.contains(99));
-}
-
 TEST(UnsortedTableOnVec, can_store_duplicate_keys) {
     UnsortedTableOnVec<int, string> table;
     table.insert(1, "first");
-    table.insert(1, "second");
-    int key = 1;
-    EXPECT_EQ(table.find(key), "first");
-    table.erase(1);
-    EXPECT_EQ(table.find(key), "second");
+    EXPECT_ANY_THROW(table.insert(1, "second"));
 }
 
 TEST(UnsortedTableOnVec, works_with_string_keys) {

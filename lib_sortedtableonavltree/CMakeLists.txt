@@ -1,0 +1,3 @@
+create_project_lib(sortedtableonavltree)
+target_include_directories(sortedtableonavltree PUBLIC ../lib_avltree)
+target_include_directories(sortedtableonavltree PUBLIC ../lib_itable)

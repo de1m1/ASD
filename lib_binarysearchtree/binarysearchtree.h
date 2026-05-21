@@ -21,12 +21,6 @@ private:
 	void print_D2_rec(Node* cur); // LNR
 	void print_D3_rec(Node* cur); // LRN
     void clear_tree(Node* cur);
-    void to_string_rec(Node* cur, std::stringstream& ss) const{
-        if (!cur) return;
-        ss << cur->val.first << ": " << cur->val.second << "\n";
-        to_string_rec(cur->left, ss);
-        to_string_rec(cur->right, ss);
-	}
 
     template<typename Func>
     void bfs(Func f);
@@ -54,7 +48,6 @@ public:
     TVal& find(const TKey& key);
     void erase(const TKey& key);
     bool empty() const noexcept { return _root == nullptr; }
-	std::string to_string() const noexcept;
 	bool contains(const TKey& key) const noexcept { return find_pos(key) != nullptr; }
 
     void print_D1() { print_D1_rec(_root); }
@@ -135,6 +128,7 @@ void BSTree<TKey, TVal>::insert(const TKey& key, const TVal& val) {
     }
 
     Node* cur = _root;
+
 	// Ищем позицию для вставки
     while (true) {
 
@@ -156,7 +150,6 @@ void BSTree<TKey, TVal>::insert(const TKey& key, const TVal& val) {
             cur = cur->right;
         }
 
-		// Ключ уже существует
         else {
             cur->val.second = val;
             delete node;
@@ -187,13 +180,12 @@ TVal& BSTree<TKey, TVal>::find(const TKey& key) {
 template<typename TKey, typename TVal>
 void BSTree<TKey, TVal>::erase(const TKey& key) {
 
-	// поиск узла для удаления и его родителя
-    Node* parent = nullptr;
+    Node* P = nullptr;
     Node* cur = _root;
 
     while (cur && cur->val.first != key) {
 
-        parent = cur;
+        P = cur;
 
         if (key < cur->val.first)
             cur = cur->left;
@@ -207,52 +199,45 @@ void BSTree<TKey, TVal>::erase(const TKey& key) {
     // 2 ребёнка
     if (cur->left && cur->right) {
 
-        Node* pred_parent = cur;
+        Node* G = cur;
         Node* pred = cur->left;
 
+        // ищем максимальный элемент
         while (pred->right) {
-            pred_parent = pred;
+            G = pred;
             pred = pred->right;
         }
 
+        // копируем значение предшественника в удаляемый узел
         cur->val = pred->val;
 
-        if (pred_parent == cur)
-            pred_parent->left = pred->left;
+        if (G == cur)
+            G->left = pred->left;
         else
-            pred_parent->right = pred->left;
+            G->right = pred->left;
 
         delete pred;
         return;
     }
 
 	// 1 ребёнок или 0
-    Node* child = nullptr;
+    Node* C = nullptr;
 
     if (cur->left != nullptr)
-        child = cur->left;
+        C = cur->left;
     else
-        child = cur->right;
+        C = cur->right;
 
-    if (!parent)
-        _root = child;
-    else if (parent->left == cur)
-        parent->left = child;
+    if (!P)
+        _root = C;
+
+    else if (P->left == cur)
+        P->left = C;
     else
-        parent->right = child;
+        P->right = C;
 
     delete cur;
 }
-template<typename TKey, typename TVal>
-std::string BSTree<TKey, TVal>::to_string() const noexcept {
-
-    std::stringstream ss;
-
-    to_string_rec(_root, ss);
-
-    return ss.str();
-}
-
 template<typename TKey, typename TVal>
 void BSTree<TKey, TVal>::print_W() {
 
@@ -260,7 +245,3 @@ void BSTree<TKey, TVal>::print_W() {
         std::cout << cur->val.first << " ";
         });
 }
-
-
-
-

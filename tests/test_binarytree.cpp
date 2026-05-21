@@ -7,7 +7,7 @@ TEST(TestTree, create) {
 
 TEST(TestTree, insert_root) {
     Tree<int, int> t;
-    t.insert(10, 1);
+    t.insert(1, 10);
 
     testing::internal::CaptureStdout();
     t.print_W();

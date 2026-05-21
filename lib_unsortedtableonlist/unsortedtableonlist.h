@@ -25,7 +25,10 @@ public:
 
 template<typename TKey, typename TVal>
 void UnsortedTableOnList<TKey, TVal>::insert(const TKey& Key, const TVal& Val) {
-    _list.push_back(std::make_pair(Key, Val));
+    if (contains(Key)) {
+        throw runtime_error("Key already exist");
+    }
+    _list.push_back(make_pair(Key, Val));
 }
 
 template<typename TKey, typename TVal>
@@ -39,6 +42,9 @@ TVal& UnsortedTableOnList<TKey, TVal>::find(const TKey& Key) {
 
 template<typename TKey, typename TVal>
 void UnsortedTableOnList<TKey, TVal>::erase(const TKey& Key) {
+    if (!contains(Key)) {
+        throw runtime_error("Key not found");
+    }
     for (auto it = _list.begin(); it != _list.end(); ++it) {
         if (it->first == Key) {
             _list.erase(it);
@@ -48,7 +54,7 @@ void UnsortedTableOnList<TKey, TVal>::erase(const TKey& Key) {
 }
 
 template<typename TKey, typename TVal>
-bool UnsortedTableOnList<TKey, TVal>::contains(const TKey& Key) const noexcept {
+bool UnsortedTableOnList<TKey, TVal>::contains(const TKey& Key) const noexcept { // const_cast чтобы обойти const итератора
     for (auto it = const_cast<List<std::pair<TKey, TVal>>&>(_list).begin();
         it != const_cast<List<std::pair<TKey, TVal>>&>(_list).end(); ++it) {
 
@@ -77,8 +83,8 @@ bool UnsortedTableOnList<TKey, TVal>::is_empty() const noexcept {
 template<typename TKey, typename TVal>
 std::ostream& UnsortedTableOnList<TKey, TVal>::print(std::ostream& out) const noexcept {
 
-    for (auto it = const_cast<List<std::pair<TKey, TVal>>&>(_list).begin();
-        it != const_cast<List<std::pair<TKey, TVal>>&>(_list).end(); ++it) {
+    for (auto it = const_cast<List<pair<TKey, TVal>>&>(_list).begin();
+        it != const_cast<List<pair<TKey, TVal>>&>(_list).end(); ++it) {
 
         out << "Key: " << it->first
             << ", Value: " << it->second << std::endl;

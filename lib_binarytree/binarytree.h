@@ -16,31 +16,31 @@ private:
 
     Node* _root;
 
-    void print_D1_rec(Node* cur); //CLR
-    void print_D2_rec(Node* cur); // LNR
-    void print_D3_rec(Node* cur); // LRN
+    void print_D1_rec(Node* cur); // CLR
+    void print_D2_rec(Node* cur); // LСR
+    void print_D3_rec(Node* cur); // LRС
     void clear_tree(Node* cur);
 
     template<typename Func>
     void bfs(Func f) const;
 
+    int count;
 
 public:
 
-    Tree() : _root(nullptr) {}
+    Tree() : _root(nullptr), count(0) {}
     ~Tree() { clear_tree(_root);}
 
     void insert(const TKey& key, const TVal& val);
+    TVal* find(const TKey& key) const;
     void erase(const TKey& key);
-    bool find(const TKey& key, TVal& val);
+    bool contains(const TKey& key, TVal& val);
     bool empty() const { return _root == nullptr; }
 
     void print_D1() { print_D1_rec(_root);}
     void print_D2() { print_D2_rec(_root);}
     void print_D3() { print_D3_rec(_root);}
     void print_W();
-
-    TVal* find_ptr(const TKey& key) const;
 };
 
 
@@ -50,7 +50,7 @@ void Tree<TKey, TVal>::bfs(Func f) const{
 
     if (!_root) return;
 
-    Queue<Node*> q;
+    Queue<Node*> q (1 + count/2);
     q.push(_root);
 
     while (!q.is_empty()) {
@@ -105,104 +105,94 @@ inline void Tree<TKey, TVal>::clear_tree(Node* cur){
 }
 
 template<typename TKey, typename TVal>
-inline void Tree<TKey, TVal>::insert(const TKey& key, const TVal& val){
+void Tree<TKey, TVal>::insert(const TKey& key, const TVal& val) {
     Node* node = new Node({ key, val });
 
     if (!_root) {
         _root = node;
+        count++;
         return;
     }
 
-    Queue<Node*> q;
-    q.push(_root);
+    bool inserted = false;
 
-    while (1) {
+    bfs([&](Node* cur) {
 
-        Node* cur = q.front();
-        q.pop();
+        if (inserted) return;
 
         if (!cur->left) {
             cur->left = node;
-            break;
-        }
-        else {
-            q.push(cur->left);
+            inserted = true;
+            return;
         }
 
         if (!cur->right) {
             cur->right = node;
-            break;
+            inserted = true;
+            return;
         }
-        else {
-            q.push(cur->right);
-        }
-    }
+        });
+
+    count++;
 }
 
 template<typename TKey, typename TVal>
-void Tree<TKey, TVal>::erase(const TKey& key){
+void Tree<TKey, TVal>::erase(const TKey& key) {
     if (!_root) return;
 
-    Node* node_to_delete = nullptr;
-    Node* last_node = nullptr;
-    Node* parent_of_last = nullptr;
+    Node* Del = nullptr;
+    Node* L = nullptr;
+    Node* P = nullptr;
 
-    Queue<Node*> q;
-    q.push(_root);
-
-    while (!q.is_empty()) {
-
-        Node* cur = q.front();
-        q.pop();
+    bfs([&](Node* cur) {
 
         if (cur->val.first == key)
-            node_to_delete = cur;
+            Del = cur;
 
         if (cur->left) {
-            parent_of_last = cur;
-            last_node = cur->left;
-            q.push(cur->left);
+            P = cur;
+            L = cur->left;
         }
 
         if (cur->right) {
-            parent_of_last = cur;
-            last_node = cur->right;
-            q.push(cur->right);
+            P = cur;
+            L = cur->right;
         }
-    }
+        });
 
-    if (!node_to_delete)
-        return;
+    if (!Del) return;
 
-    if (last_node == _root) {
+    if (L == _root) {
         delete _root;
         _root = nullptr;
+        count--;
         return;
     }
 
-    node_to_delete->val = last_node->val;
+    Del->val = L->val;
 
-    if (parent_of_last->right == last_node)
-        parent_of_last->right = nullptr;
+    if (P->right == L)
+        P->right = nullptr;
     else
-        parent_of_last->left = nullptr;
+        P->left = nullptr;
 
-    delete last_node;
+    delete L;
+    count--;
 }
 
 template<typename TKey, typename TVal>
 void Tree<TKey, TVal>::print_W() {
 
     bfs([](Node* cur) {
-        std::cout << cur->val.first << " ";
+        std::cout << cur->val.second << " ";
         });
 }
 
 template<typename TKey, typename TVal>
-inline TVal* Tree<TKey, TVal>::find_ptr(const TKey& key) const{
+inline TVal* Tree<TKey, TVal>::find(const TKey& key) const{
     TVal* result = nullptr;
 
-    bfs([&](Node* cur) {
+	bfs([&](Node* cur) { // [&] - захват по ссылке, чтобы иметь доступ к result
         if (cur->val.first == key)
             result = &cur->val.second;
         });
@@ -211,11 +201,11 @@ inline TVal* Tree<TKey, TVal>::find_ptr(const TKey& key) const{
 }
 
 template<typename TKey, typename TVal>
-bool Tree<TKey, TVal>::find(const TKey& key, TVal& val) {
+bool Tree<TKey, TVal>::contains(const TKey& key, TVal& val) {
 
     bool found = false;
 
-    bfs([&](Node* cur) {
+	bfs([&](Node* cur) { // [&] - захват по ссылке, чтобы иметь доступ к found и val
 
         if (cur->val.first == key) {
             val = cur->val.second;

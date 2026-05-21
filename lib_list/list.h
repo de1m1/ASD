@@ -82,6 +82,14 @@ public:
     Iterator begin();  // Итератор на первый элемент
     Iterator end();    // Итератор на позицию после последнего элемента
 
+    Iterator begin() const {
+        return Iterator(head);
+    }
+
+    Iterator end() const {
+        return Iterator(nullptr);
+    }
+
     // Метод Флойда для нахождения цикла
     template<typename T>
     friend bool CheckListCycleFloyd(const List<T>& list);

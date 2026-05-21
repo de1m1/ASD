@@ -28,7 +28,7 @@ void UnsortedTableOnTree<TKey, TVal>::insert(const TKey& Key, const TVal& Val) {
 
 template<typename TKey, typename TVal>
 TVal& UnsortedTableOnTree<TKey, TVal>::find(const TKey& Key) {
-    TVal* ptr = _tree.find_ptr(Key);
+    TVal* ptr = _tree.find(Key);
 
     if (!ptr)
         throw std::runtime_error("Key not found");
@@ -48,7 +48,7 @@ void UnsortedTableOnTree<TKey, TVal>::erase(const TKey& Key) {
 template<typename TKey, typename TVal>
 bool UnsortedTableOnTree<TKey, TVal>::contains(const TKey& Key) const noexcept {
 
-    return _tree.find_ptr(Key) != nullptr;
+    return _tree.find(Key) != nullptr;
 }
 
 template<typename TKey, typename TVal>

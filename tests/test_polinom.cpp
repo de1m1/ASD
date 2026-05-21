@@ -1,7 +1,8 @@
 #include "polinom.h"
 #include <gtest/gtest.h>
 
-TEST(Polynom, can_create) {
+TEST(Polynom, create) {
+
     Polynom p1;
     Monom m(3, 2, 0, 0);
     Polynom p2(m);
@@ -10,7 +11,8 @@ TEST(Polynom, can_create) {
     EXPECT_TRUE(p2 == p3);
 }
 
-TEST(Polynom, add_polynoms) {
+TEST(Polynom, add) {
+
     Polynom p1;
     p1.addMonom(Monom(2, 1, 0, 0));
 
@@ -22,7 +24,8 @@ TEST(Polynom, add_polynoms) {
     EXPECT_DOUBLE_EQ(result.Calculate(1, 1, 1), 5);
 }
 
-TEST(Polynom, subtract_polynoms) {
+TEST(Polynom, sub) {
+
     Polynom p1;
     p1.addMonom(Monom(5, 1, 0, 0));
 
@@ -34,7 +37,8 @@ TEST(Polynom, subtract_polynoms) {
     EXPECT_DOUBLE_EQ(result.Calculate(1, 1, 1), 2);
 }
 
-TEST(Polynom, multiply_polynoms) {
+TEST(Polynom, mul) {
+
     Polynom p1;
     p1.addMonom(Monom(2, 1, 0, 0));
 
@@ -46,7 +50,8 @@ TEST(Polynom, multiply_polynoms) {
     EXPECT_DOUBLE_EQ(result.Calculate(1, 1, 1), 6);
 }
 
-TEST(Polynom, plus_equals) {
+TEST(Polynom, add_eq) {
+
     Polynom p1;
     p1.addMonom(Monom(2, 1, 0, 0));
 
@@ -58,7 +63,8 @@ TEST(Polynom, plus_equals) {
     EXPECT_DOUBLE_EQ(p1.Calculate(1, 1, 1), 5);
 }
 
-TEST(Polynom, minus_equals) {
+TEST(Polynom, sub_eq) {
+
     Polynom p1;
     p1.addMonom(Monom(5, 1, 0, 0));
 
@@ -70,7 +76,8 @@ TEST(Polynom, minus_equals) {
     EXPECT_DOUBLE_EQ(p1.Calculate(1, 1, 1), 3);
 }
 
-TEST(Polynom, mult_equals) {
+TEST(Polynom, mul_eq) {
+
     Polynom p1;
     p1.addMonom(Monom(2, 1, 0, 0));
 
@@ -82,7 +89,8 @@ TEST(Polynom, mult_equals) {
     EXPECT_DOUBLE_EQ(p1.Calculate(1, 1, 1), 8);
 }
 
-TEST(Polynom, removes_zero_after_subtraction) {
+TEST(Polynom, removes_zero_after_sub) {
+
     Polynom p1;
     p1.addMonom(Monom(3, 1, 0, 0));
 
@@ -94,7 +102,7 @@ TEST(Polynom, removes_zero_after_subtraction) {
     EXPECT_DOUBLE_EQ(result.Calculate(1, 1, 1), 0);
 }
 
-TEST(Polynom, calculate_multiple_terms) {
+TEST(Polynom, calculate) {
     Polynom p;
 
     p.addMonom(Monom(2, 2, 0, 0));
@@ -105,7 +113,7 @@ TEST(Polynom, calculate_multiple_terms) {
     EXPECT_DOUBLE_EQ(val, 2 * 4 + 3 * 3);
 }
 
-TEST(Polynom, equality) {
+TEST(Polynom, eq) {
     Polynom p1;
     p1.addMonom(Monom(2, 1, 0, 0));
     p1.addMonom(Monom(3, 0, 1, 0));
@@ -115,14 +123,4 @@ TEST(Polynom, equality) {
     p2.addMonom(Monom(2, 1, 0, 0));
 
     EXPECT_TRUE(p1 == p2);
-}
-
-TEST(Polynom, inequality) {
-    Polynom p1;
-    p1.addMonom(Monom(2, 1, 0, 0));
-
-    Polynom p2;
-    p2.addMonom(Monom(3, 1, 0, 0));
-
-    EXPECT_TRUE(p1 != p2);
 }

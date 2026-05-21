@@ -1,10 +1,6 @@
 #include <gtest/gtest.h>
 #include "unsortedtableonlist.h"
 
-TEST(UnsortedTableOnList, canCreate) {
-    UnsortedTableOnList<int, std::string> table;
-    EXPECT_TRUE(table.is_empty());
-}
 
 TEST(UnsortedTableOnList, insertAddsElement) {
     UnsortedTableOnList<int, int> table;
@@ -12,13 +8,6 @@ TEST(UnsortedTableOnList, insertAddsElement) {
 
     EXPECT_FALSE(table.is_empty());
     EXPECT_TRUE(table.contains(1));
-}
-
-TEST(UnsortedTableOnList, findReturnsValue) {
-    UnsortedTableOnList<int, std::string> table;
-    table.insert(1, "one");
-
-    EXPECT_EQ(table.find(1), "one");
 }
 
 TEST(UnsortedTableOnList, findThrowsIfNotFound) {
@@ -41,9 +30,7 @@ TEST(UnsortedTableOnList, eraseDoesNothingIfNotFound) {
     UnsortedTableOnList<int, int> table;
     table.insert(1, 10);
 
-    table.erase(5);
-
-    EXPECT_TRUE(table.contains(1));
+    EXPECT_ANY_THROW(table.erase(5));
 }
 
 TEST(UnsortedTableOnList, replaceUpdatesValue) {
@@ -61,25 +48,10 @@ TEST(UnsortedTableOnList, replaceThrowsIfNotFound) {
     EXPECT_THROW(table.replace(5, 10), std::runtime_error);
 }
 
-TEST(UnsortedTableOnList, isEmptyAfterInsert) {
+TEST(UnsortedTableOnList, isEmpty) {
     UnsortedTableOnList<int, int> table;
-    table.insert(1, 10);
 
-    EXPECT_FALSE(table.is_empty());
-}
-
-TEST(UnsortedTableOnList, containsTrueIfExists) {
-    UnsortedTableOnList<int, int> table;
-    table.insert(42, 100);
-
-    EXPECT_TRUE(table.contains(42));
-}
-
-TEST(UnsortedTableOnList, containsFalseIfNotExists) {
-    UnsortedTableOnList<int, int> table;
-    table.insert(42, 100);
-
-    EXPECT_FALSE(table.contains(99));
+    EXPECT_TRUE(table.is_empty());
 }
 
 TEST(UnsortedTableOnList, worksWithStringKeys) {

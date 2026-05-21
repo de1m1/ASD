@@ -7,7 +7,7 @@ template<typename TKey, typename TVal>
 class SortedTableOnVec : public ITable<TKey, TVal> {
 private:
 
-	TVector<std::pair<TKey, TVal>>_rows;
+	TVector<pair<TKey, TVal>>_rows;
 	int binary_search(const TKey& key) const;
 
 public:
@@ -26,10 +26,10 @@ public:
 template<typename TKey, typename TVal>
 int SortedTableOnVec<TKey, TVal>::binary_search(const TKey& key) const {
     int left = 0;
-    int right = _rows.size() - 1;
+    int right = _rows.size();
 
-    while (left <= right) {
-        int mid = (left + right) / 2;
+    while (left < right) {
+        int mid = left + (right - left) / 2;
 
         if (_rows[mid].first == key)
             return mid;
@@ -37,23 +37,25 @@ int SortedTableOnVec<TKey, TVal>::binary_search(const TKey& key) const {
         if (_rows[mid].first < key)
             left = mid + 1;
         else
-            right = mid - 1;
+            right = mid;
     }
 
-    return -1;
+    return left;
 }
 
 template<typename TKey, typename TVal>
 void SortedTableOnVec<TKey, TVal>::insert(const TKey& Key, const TVal& Val) {
 
-    if (contains(Key))
-        throw std::runtime_error("Key already exists");
-
     size_t pos = 0;
-    while (pos < _rows.size() && _rows[pos].first < Key)
-        ++pos;
 
+    if (!is_empty()) {
+        pos = binary_search(Key);
+
+        if (_rows[pos].first == Key)
+            throw std::runtime_error("Key already exist ");
+    }
     _rows.push_back({});
+
     for (size_t i = _rows.size() - 1; i > pos; --i) {
         _rows[i] = _rows[i - 1];
     }
@@ -62,40 +64,63 @@ void SortedTableOnVec<TKey, TVal>::insert(const TKey& Key, const TVal& Val) {
 
 template<typename TKey, typename TVal>
 TVal& SortedTableOnVec<TKey, TVal>::find(const TKey& Key) {
-    int index = binary_search(Key);
-    if (index == -1)
-        throw std::runtime_error("Key not found");
+    
+    if (!is_empty()) {
+        int index = binary_search(Key);
 
-    return _rows[index].second;
+        if (_rows[index].first == Key)
+            return _rows[index].second;
+    }
+ 
+    throw std::runtime_error("Key not found");
 }
 
 template<typename TKey, typename TVal>
 void SortedTableOnVec<TKey, TVal>::erase(const TKey& Key) {
+    if (!is_empty()) {
+        int index = binary_search(Key);
 
-    int index = binary_search(Key);
-    if (index == -1)
-        throw std::runtime_error("Key not found");
+        if (_rows[index].first == Key) {
+            for (size_t i = index; i < _rows.size() - 1; ++i) {
+                _rows[i] = _rows[i + 1];
+            }
 
-    for (size_t i = index; i < _rows.size() - 1; ++i) {
-        _rows[i] = _rows[i + 1];
+            _rows.pop_back();
+            return;
+        }
+
     }
 
-    _rows.pop_back();
+    throw std::runtime_error("Key not found");
+
+  
 }
 
 template<typename TKey, typename TVal>
 void SortedTableOnVec<TKey, TVal>::replace(const TKey& Key, const TVal& Val) {
 
-    int index = binary_search(Key);
-    if (index == -1)
-        throw std::runtime_error("Key not found");
+    if (!is_empty()) {
+        int index = binary_search(Key);
 
-    _rows[index].second = Val;
+        if (_rows[index].first == Key) {
+            _rows[index].second = Val;
+            return;
+        }
+    }
+
+    throw std::runtime_error("Key not found");
 }
 
 template<typename TKey, typename TVal>
 bool SortedTableOnVec<TKey, TVal>::contains(const TKey& Key) const noexcept {
-    return binary_search(Key) != -1;
+    if (!is_empty()) {
+        int index = binary_search(Key);
+
+        if (_rows[index].first == Key)
+            return true;
+    }
+
+    return false;
 }
 
 template<typename TKey, typename TVal>
